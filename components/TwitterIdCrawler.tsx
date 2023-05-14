@@ -1,14 +1,48 @@
 'use client'
 
-import { useData } from '@context/DataContext'
+import { providerValuesInterface, useData } from '@context/DataContext'
 import axios from 'axios'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { FaRegCopy, FaRegTrashAlt, FaKey, FaServer } from 'react-icons/fa'
 import { PulseLoader } from 'react-spinners'
 
+interface currentAccountInterface {
+    url: string
+    name: string
+    username: string
+    entities: any
+    verified: boolean
+    profile_image_url: string
+    created_at: string
+    id: string
+    description: string
+}
+
 const TwitterIdCrawler = () => {
-    const [currentAccount, setCurrentAccount] = useState({})
+    const [currentAccount, setCurrentAccount] = useState<currentAccountInterface>({
+        url: "https://t.co/1cOni3oayK",
+        name: "official_IZONE",
+        username: "official_izone",
+        entities: {
+          url: {
+            urls: [
+              {
+                start: 0,
+                end: 23,
+                url: "https://t.co/1cOni3oayK",
+                expanded_url: "http://cafe.daum.net/official-izone",
+                display_url: "cafe.daum.net/official-izone"
+              }
+            ]
+          }
+        },
+        verified: true,
+        profile_image_url: "https://pbs.twimg.com/profile_images/1335600379090759681/Az89GwTv_normal.jpg",
+        created_at: "2018-08-29T10:09:00.000Z",
+        id: "1034744720537219073",
+        description: "IZ*ONE(아이즈원) OFFICIAL TWITTER"
+      })
     const [listOfId, setListOfId] = useState('NA')
     const [loading, setLoading] = useState(false)
     const [loading2, setLoading2] = useState(false)
@@ -17,9 +51,32 @@ const TwitterIdCrawler = () => {
     const [maximum, setMaximum] = useState(10)
     const [switcher, setSwitcher] = useState(false)
 
-    const { restored, setRestored, totalPictures, setTotalPictures, totalVideos, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, setDataLoading, autoDownload, setAutoDownload, setAdvanceToggle, localStored, setLocalStored } = useData()
+    const { 
+        restored, 
+        setRestored, 
+        totalPictures, 
+        setTotalPictures, 
+        totalVideos, 
+        setTotalVideos, 
+        twitterId, 
+        setTwitterId, 
+        twitterUsername, 
+        setTwitterUsername, 
+        nextToken2, 
+        setNextToken2, 
+        allPosts, 
+        setAllPosts, 
+        finalList, 
+        setFinalList, 
+        setDataLoading, 
+        autoDownload, 
+        setAutoDownload, 
+        setAdvanceToggle, 
+        localStored, 
+        setLocalStored 
+    } = useData() as providerValuesInterface
 
-    const handleCopy = str => {
+    const handleCopy = (str: any) => {
         navigator.clipboard.writeText(JSON.stringify(str))
     }
 
@@ -31,7 +88,17 @@ const TwitterIdCrawler = () => {
         setFinalList([])
         setBearer('')
         setTwitterUsername('')
-        setCurrentAccount({})
+        setCurrentAccount({
+            url: "https://t.co/1cOni3oayK",
+            name: "official_IZONE",
+            username: "official_izone",
+            entities: {},
+            verified: true,
+            profile_image_url: "https://pbs.twimg.com/profile_images/1335600379090759681/Az89GwTv_normal.jpg",
+            created_at: "2018-08-29T10:09:00.000Z",
+            id: "1034744720537219073",
+            description: "IZ*ONE(아이즈원) OFFICIAL TWITTER"
+          })
         setTotalPictures(0)
         setTotalVideos(0)
         setLocalStored({
@@ -44,7 +111,7 @@ const TwitterIdCrawler = () => {
         })
     }
 
-    const handleUsernameIdFetch = async (e) => {
+    const handleUsernameIdFetch = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setLoading2(true)
 
@@ -54,6 +121,8 @@ const TwitterIdCrawler = () => {
             if (response){
                 setTwitterId(response.data.user_id.data.id);
                 setCurrentAccount(response.data.user_id.data);
+                console.log(currentAccount);
+                
                 setLoading2(false)
             }
         } catch (error){
@@ -62,8 +131,9 @@ const TwitterIdCrawler = () => {
 
     }
 
-    const handleTwitterPostIdCrawler = async  e => {
-        e.preventDefault()
+    
+
+    const handleTwitterPostIdCrawler = async () => {
         setLoading(true)
         setDataLoading(true)
 
@@ -72,13 +142,15 @@ const TwitterIdCrawler = () => {
             console.log(response);
 
             if (response){
-                let postIds = response.data.posts.data.map(post => {
-                    if (post.referenced_tweets){
-                        if (post.referenced_tweets.some(item => item.type === 'retweeted')){
-                            return post.referenced_tweets.find(item => item.type === 'retweeted').id
-                        }
+                let postIds = response.data.posts.data.map((post: any) => {
+                    if (!post.referenced_tweets){
                         return post.id
                     }
+
+                    if (post.referenced_tweets.some((item: any) => item.type === 'retweeted')){
+                        return post.referenced_tweets.find((item: any )=> item.type === 'retweeted').id
+                    }
+
                     return post.id
                 })
 
@@ -138,11 +210,11 @@ const TwitterIdCrawler = () => {
     useEffect(() => {
         if (allPosts.posts){
             setTotalPictures(prev => {
-                return prev + allPosts?.posts?.includes?.media?.filter(attach => attach.type === 'photo').length
+                return prev + allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'photo').length
             })
 
             setTotalVideos(prev => {
-                return prev + allPosts?.posts?.includes?.media?.filter(attach => attach.type === 'video').length
+                return prev + allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'video').length
             })
             
         }
@@ -173,13 +245,13 @@ const TwitterIdCrawler = () => {
                     <label htmlFor='' className='block font-medium'>Username</label>
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <input type="text" className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={nextToken} required />
+                    <input type="text" className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={nextToken ? true : false} required />
                 </div>
                 <div className='grid grid-cols-2 items-center justify-center py-1'>
                     <label htmlFor='' className='block font-medium'>Bearer Token</label>
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <input type="text" className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={bearer} onChange={e => setBearer(e.target.value)} placeholder='Bearer Token' disabled={nextToken} required />
+                    <input type="text" className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={bearer} onChange={e => setBearer(e.target.value)} placeholder='Bearer Token' disabled={nextToken ? true : false} required />
                 </div>
             </div>
             <div className='flex justify-end items-center'>
@@ -222,7 +294,7 @@ const TwitterIdCrawler = () => {
                     <div className='grid grid-cols-2 items-center h-[32px]'>
                         <p className='text-xs opacity-50'>Max Result</p>
                         <div className='h-full'>
-                            <input type="number" value={maximum} onChange={e => setMaximum(e.target.value)} className='w-full bg-[#ffffff15] h-full px-2 rounded' />
+                            <input type="number" value={maximum} onChange={e => setMaximum(+e.target.value)} className='w-full bg-[#ffffff15] h-full px-2 rounded' />
                         </div>
                     </div>
                 </div>
@@ -233,7 +305,7 @@ const TwitterIdCrawler = () => {
                 <div className='flex flex-col gap-2'>
                     <div className='flex gap-2 justify-between'>
                         <div className='flex gap-2'>
-                            <button onClick={handleTwitterPostIdCrawler} className='text-sm h-[32px] w-[90px] bg-[#4D96FF] text-white font-medium rounded disabled:opacity-50' disabled={loading || !twitterId || nextToken === 'Last'}>{loading ? <PulseLoader size={5} color="#fff" /> : nextToken ? 'Next' : 'Fetch'}</button>
+                            <button type='button' onClick={handleTwitterPostIdCrawler} className='text-sm h-[32px] w-[90px] bg-[#4D96FF] text-white font-medium rounded disabled:opacity-50' disabled={loading || !twitterId || nextToken === 'Last'}>{loading ? <PulseLoader size={5} color="#fff" /> : nextToken ? 'Next' : 'Fetch'}</button>
                             {localStored && <button type='button' onClick={() => setAdvanceToggle(prev => !prev)} className='text-lg h-[32px] aspect-square bg-[#4D96FF] text-white font-medium rounded grid place-items-center disabled:opacity-50' disabled={!localStored.currentUsername}><FaServer /></button>}
                         </div>
                         <button type='button' onClick={handleReset} className='text-lg h-[32px] aspect-square bg-[#DF2E38] text-white font-medium rounded disabled:opacity-50 grid place-items-center' disabled={loading || !nextToken}><FaRegTrashAlt /></button>
@@ -261,7 +333,7 @@ const TwitterIdCrawler = () => {
                 <div className='grid grid-cols-2'>
                     <div>
                         <h3 className='text-sm font-bold'>Videos Fetched:</h3>
-                        <p className='text-lg opacity-50 font-medium'>{allPosts.posts ? allPosts?.posts?.includes?.media?.filter(attach => attach.type === 'video').length : 0}</p>
+                        <p className='text-lg opacity-50 font-medium'>{allPosts.posts ? allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'video').length : 0}</p>
                     </div>
                     <div>
                         <h3 className='text-sm font-bold'>Total Videos Fetched:</h3>
@@ -271,7 +343,7 @@ const TwitterIdCrawler = () => {
                 <div className='grid grid-cols-2'>
                     <div>
                         <h3 className='text-sm font-bold'>Pictures Fetched:</h3>
-                        <p className='text-lg opacity-50 font-medium'>{allPosts.posts ? allPosts?.posts?.includes?.media?.filter(attach => attach.type === 'photo').length : 0}</p>
+                        <p className='text-lg opacity-50 font-medium'>{allPosts.posts ? allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'photo').length : 0}</p>
                     </div>
                     <div>
                         <h3 className='text-sm font-bold'>Total Pictures Fetched:</h3>

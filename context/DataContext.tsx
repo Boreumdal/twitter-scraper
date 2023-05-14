@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-interface finalListInterface {
+export interface finalListInterface {
     id: string
     author_id: string
     created_at: string
@@ -21,7 +21,7 @@ interface finalListInterface {
     }
   }
 
-interface localStoredInterface {
+export interface localStoredInterface {
     currentUsername: string
     currentId: string
     nextToken: string
@@ -34,7 +34,7 @@ interface localStoredInterface {
     
 // }
 
-interface providerValuesInterface {
+export interface providerValuesInterface {
     restored: boolean
     setRestored: React.Dispatch<React.SetStateAction<boolean>>
     totalPictures: number
@@ -47,7 +47,7 @@ interface providerValuesInterface {
     setTwitterUsername: React.Dispatch<React.SetStateAction<string>>
     nextToken2: string
     setNextToken2: React.Dispatch<React.SetStateAction<string>>
-    allPosts: {}
+    allPosts: any
     setAllPosts: React.Dispatch<React.SetStateAction<{}>>
     finalList: finalListInterface[]
     setFinalList: React.Dispatch<React.SetStateAction<finalListInterface[]>>
@@ -110,6 +110,6 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
 }
 
 export const useData = () => {
-    return useContext(DataPostContext)
+    return useContext<providerValuesInterface | null>(DataPostContext)
 }
 
