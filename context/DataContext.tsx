@@ -2,6 +2,17 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
+export interface authorNameInterface {
+    url: string
+    profile_image_url: string
+    username: string
+    created_at: string
+    id: string
+    description: string
+    name: string
+    verified: boolean
+}
+
 export interface finalListInterface {
     id: string
     author_id: string
@@ -9,16 +20,7 @@ export interface finalListInterface {
     lang: string
     text: string
     images: string[]
-    author_name: {
-        url: string
-        profile_image_url: string
-        username: string
-        created_at: string
-        id: string
-        description: string
-        name: string
-        verified: boolean
-    }
+    author_name: authorNameInterface
     referenced_tweets?: any
   }
 
@@ -31,9 +33,61 @@ export interface localStoredInterface {
     totalPictures: number
 }
 
-// interface allPostsInterface {
-    
-// }
+interface postsDataInterface {
+    posts?: {
+        data: {
+            entities?: {
+                mentions?: [
+                    {
+                        start: number
+                        end: number
+                        username: string
+                        id: string
+                    }
+                ],
+                urls?: {
+                    start: number
+                    end: number
+                    url: string
+                    expanded_url: string
+                    display_url: string
+                }[]
+                hashtags?: {
+                    start: number
+                    end: number
+                    tag: string
+                }[]
+            },
+            created_at: string
+            text: string
+            conversation_id: string
+            attachments?: {
+              media_keys?: string[]
+            }
+            id: string
+            author_id: string
+            lang: string
+            edit_history_tweet_ids: string[]
+        }[]
+        includes: {
+            media?: {
+                media_key: string
+                type: string
+                url: string
+            }[]
+            users?: {
+                username: string
+                name: string
+                description: string
+                id: string
+                created_at: string
+                profile_image_url: string
+                verified: boolean
+                url: string
+            }[]
+        }
+    }
+}
 
 export interface providerValuesInterface {
     restored: boolean
@@ -48,8 +102,8 @@ export interface providerValuesInterface {
     setTwitterUsername: React.Dispatch<React.SetStateAction<string>>
     nextToken2: string
     setNextToken2: React.Dispatch<React.SetStateAction<string>>
-    allPosts: any
-    setAllPosts: React.Dispatch<React.SetStateAction<{}>>
+    allPosts: postsDataInterface
+    setAllPosts: React.Dispatch<React.SetStateAction<postsDataInterface>>
     finalList: finalListInterface[]
     setFinalList: React.Dispatch<React.SetStateAction<finalListInterface[]>>
     dataLoading: boolean
@@ -65,7 +119,7 @@ export interface providerValuesInterface {
 const DataPostContext = createContext<providerValuesInterface | null>(null)
 
 export const DataContext = ({ children }: { children: React.ReactNode }) => {
-    const [allPosts, setAllPosts] = useState({})
+    const [allPosts, setAllPosts] = useState<postsDataInterface>({})
     const [finalList, setFinalList] = useState<finalListInterface[]>([])
     const [dataLoading, setDataLoading] = useState<boolean>(false)
     const [autoDownload, setAutoDownload] = useState<boolean>(false)

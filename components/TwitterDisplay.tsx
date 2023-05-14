@@ -1,12 +1,14 @@
 'use client'
 
-import { finalListInterface, providerValuesInterface, useData } from '@context/DataContext'
+import { authorNameInterface, finalListInterface, providerValuesInterface, useData } from '@context/DataContext'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { RingLoader } from 'react-spinners'
 import { saveAs } from 'file-saver'
 import { FaSadTear, FaLink, FaGlobeAsia } from 'react-icons/fa'
+
+
 
 const TwitterDisplay = () => {
     const [switcher, setSwitcher] = useState(false)
@@ -26,13 +28,13 @@ const TwitterDisplay = () => {
                     lang: post.lang,
                     text: post.text,
                     images: [],
-                    author_name: allPosts?.posts.includes.users.filter((user: any) => user.id === post.author_id)[0]
+                    author_name: allPosts.posts?.includes.users?.filter((user: authorNameInterface) => user.id === post.author_id)[0] as authorNameInterface
                 }
 
-                let temp: any [] = []
+                let temp: string[] = []
 
                 post?.attachments?.media_keys?.forEach((key: any) => {
-                    allPosts?.posts.includes.media.forEach((attach: any) => {
+                    allPosts.posts?.includes.media?.forEach((attach: any) => {
                         if (attach.type === 'photo' && attach.media_key === key){
                             temp.push(`collection/media/${attach.url.match(/media\/(.*)/)[1]}.jpg`)
                         }
@@ -64,13 +66,12 @@ const TwitterDisplay = () => {
                 
             })
 
-            allPosts?.posts?.includes.media.forEach((attach: any) => {
-                if (attach.type === 'photo'){
-                    if (autoDownload){
-                        handleDownload(attach.url)
-                    }
+            allPosts.posts?.includes.media?.forEach((attach: any) => {
+                if (attach.type === 'photo' && autoDownload){
+                    handleDownload(attach.url)
                 }
             })
+            
         }
 
     }, [allPosts])
@@ -86,6 +87,7 @@ const TwitterDisplay = () => {
         } else {
             setSwitcher(true)
         }
+        
     }, [finalList])
 
     const handleVideoCopy = (link: any) => {
@@ -120,7 +122,7 @@ const TwitterDisplay = () => {
                     <div className='grid grid-cols-2 gap-2'>
                         {
                             post?.attachments?.media_keys?.map((key: any) => {
-                                return allPosts.posts.includes.media.map((attach: any) => {
+                                return allPosts.posts?.includes.media?.map((attach: any) => {
                                     if (attach.type === 'photo' && attach.media_key === key){
                                         return (
                                             <div key={attach.media_key} onClick={() => handleDownload(attach.url)} className='cursor-pointer hover:opacity-90 w-fit h-fit'>
@@ -161,3 +163,5 @@ const TwitterDisplay = () => {
 }
 
 export default TwitterDisplay
+
+

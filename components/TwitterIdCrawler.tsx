@@ -1,6 +1,6 @@
 'use client'
 
-import { providerValuesInterface, useData } from '@context/DataContext'
+import { authorNameInterface, providerValuesInterface, useData } from '@context/DataContext'
 import axios from 'axios'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
@@ -84,7 +84,7 @@ const TwitterIdCrawler = () => {
         setTwitterId('')
         setListOfId('NA')
         setNextToken('')
-        setAllPosts([])
+        setAllPosts({})
         setFinalList([])
         setBearer('')
         setTwitterUsername('')
@@ -121,7 +121,6 @@ const TwitterIdCrawler = () => {
             if (response){
                 setTwitterId(response.data.user_id.data.id);
                 setCurrentAccount(response.data.user_id.data);
-                console.log(currentAccount);
                 
                 setLoading2(false)
             }
@@ -131,16 +130,13 @@ const TwitterIdCrawler = () => {
 
     }
 
-    
-
     const handleTwitterPostIdCrawler = async () => {
         setLoading(true)
         setDataLoading(true)
 
         try {
             const response = await axios.post('http://localhost:3000/api/twitter/ids', JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : nextToken, bearer, maximum: maximum < 5 || maximum > 100 ? 5 : maximum }))
-            console.log(response);
-
+            
             if (response){
                 let postIds = response.data.posts.data.map((post: any) => {
                     if (!post.referenced_tweets){
@@ -202,19 +198,17 @@ const TwitterIdCrawler = () => {
         }
 
         fetchHundredPosts()
-        console.log(finalList);
-        console.log(allPosts);
         
     }, [nextToken])
 
     useEffect(() => {
         if (allPosts.posts){
             setTotalPictures(prev => {
-                return prev + allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'photo').length
+                return prev + allPosts.posts?.includes.media?.filter((attach: any) => attach.type === 'photo').length!
             })
 
             setTotalVideos(prev => {
-                return prev + allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'video').length
+                return prev + allPosts.posts?.includes.media?.filter((attach: any) => attach.type === 'video').length!
             })
             
         }
