@@ -1,6 +1,6 @@
 'use client'
 
-import { useData } from '@context/DataContext'
+import { finalListInterface, providerValuesInterface, useData } from '@context/DataContext'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -10,34 +10,34 @@ import { FaSadTear, FaLink, FaGlobeAsia } from 'react-icons/fa'
 
 const TwitterDisplay = () => {
     const [switcher, setSwitcher] = useState(false)
-    const { allPosts, finalList, setFinalList, dataLoading, autoDownload, setDataLoading, localStored, setLocalStored } = useData()
+    const { allPosts, finalList, setFinalList, dataLoading, autoDownload, setDataLoading, localStored, setLocalStored } = useData() as providerValuesInterface
     
-    const handleDownload = link => {
-        saveAs(link + '?format=jpg&name=4096x4096', link.match(/media\/(.*)/)[1])
+    const handleDownload = (link: string) => {
+        saveAs(link + '?format=jpg&name=4096x4096', link.match(/media\/(.*)/)![1])
     }
 
     useEffect(() => {
         if (allPosts.posts){
-            allPosts.posts?.data.map(post => {
-                let newList = {
+            allPosts.posts?.data.map((post: any) => {
+                let newList: finalListInterface = {
                     id: post.id,
                     author_id: post.author_id,
                     created_at: post.created_at,
                     lang: post.lang,
                     text: post.text,
                     images: [],
-                    author_name: allPosts?.posts.includes.users.filter(user => user.id === post.author_id)[0]
+                    author_name: allPosts?.posts.includes.users.filter((user: any) => user.id === post.author_id)[0]
                 }
 
-                let temp = []
+                let temp: any [] = []
 
-                post?.attachments?.media_keys?.forEach(key => {
-                    allPosts?.posts.includes.media.forEach(attach => {
+                post?.attachments?.media_keys?.forEach((key: any) => {
+                    allPosts?.posts.includes.media.forEach((attach: any) => {
                         if (attach.type === 'photo' && attach.media_key === key){
                             temp.push(`collection/media/${attach.url.match(/media\/(.*)/)[1]}.jpg`)
                         }
                         if (attach.type === 'video' && attach.media_key === key){
-                            post?.entities.urls.map(url => {
+                            post?.entities.urls.map((url: any) => {
                                 if (url.media_key === key){
                                     temp.push(`collection/media/${url.url.match(/t.co\/(.*)/)[1]}.mp4`)
                                 }
@@ -64,7 +64,7 @@ const TwitterDisplay = () => {
                 
             })
 
-            allPosts?.posts?.includes.media.forEach(attach => {
+            allPosts?.posts?.includes.media.forEach((attach: any) => {
                 if (attach.type === 'photo'){
                     if (autoDownload){
                         handleDownload(attach.url)
@@ -88,14 +88,14 @@ const TwitterDisplay = () => {
         }
     }, [finalList])
 
-    const handleVideoCopy = link => {
+    const handleVideoCopy = (link: any) => {
         if (link.includes('video')){
             let data = link.split('video')[0]
             navigator.clipboard.writeText(data)
         }
     }
 
-    const handleCopy = str => {
+    const handleCopy = (str: any) => {
         navigator.clipboard.writeText(typeof(str) === 'string' ? str : JSON.stringify(str))
     }
 
@@ -112,15 +112,15 @@ const TwitterDisplay = () => {
                         </div>
                     </div>
                 )
-                : allPosts.posts?.data.map((post, idx) => (
+                : allPosts.posts?.data.map((post: any, idx: number) => (
                 <div key={idx} className='bg-[#171717] p-4 grid grid-cols-2 gap-1'>
                     <div>
                         <p className='whitespace-pre-line'>{post.text}</p>
                     </div>
                     <div className='grid grid-cols-2 gap-2'>
                         {
-                            post?.attachments?.media_keys?.map(key => {
-                                return allPosts.posts.includes.media.map(attach => {
+                            post?.attachments?.media_keys?.map((key: any) => {
+                                return allPosts.posts.includes.media.map((attach: any) => {
                                     if (attach.type === 'photo' && attach.media_key === key){
                                         return (
                                             <div key={attach.media_key} onClick={() => handleDownload(attach.url)} className='cursor-pointer hover:opacity-90 w-fit h-fit'>
@@ -129,7 +129,7 @@ const TwitterDisplay = () => {
                                         )
                                     }
                                     if (attach.type === 'video' && attach.media_key === key){
-                                        return post?.entities.urls.map(url => {
+                                        return post?.entities.urls.map((url: any) => {
                                             if (url.media_key === key){
                                                 return (
                                                     <div key={key} className='grid grid-cols-2 h-[38px] items-center bg-[#ffffff15] border-l-4 border-transparent border-l-[#DF2E38] pr-2'>

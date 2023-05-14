@@ -19,6 +19,7 @@ export interface finalListInterface {
         name: string
         verified: boolean
     }
+    referenced_tweets?: any
   }
 
 export interface localStoredInterface {
