@@ -1,10 +1,10 @@
 'use client'
 
-import { useData } from '@context/DataContext'
+import { providerValuesInterface, useData } from '@context/DataContext'
 import React from 'react'
 
 const AdvanceSettings = () => {
-    const { setRestored, totalPictures, setTotalPictures, totalVideos, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, setNextToken2, advanceToggle, setAdvanceToggle, localStored, setFinalList } = useData()
+    const { setRestored, totalPictures, setTotalPictures, totalVideos, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, setNextToken2, advanceToggle, setAdvanceToggle, localStored, setFinalList } = useData() as providerValuesInterface
 
     const handleRestore = () => {
         setTwitterUsername(localStored.currentUsername)
