@@ -1,12 +1,13 @@
 'use client'
 
-import { authorNameInterface, finalListInterface, providerValuesInterface, useData } from '@context/DataContext'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { authorNameInterface, finalListInterface, providerValuesInterface } from '../../types/all'
 import { RingLoader } from 'react-spinners'
 import { saveAs } from 'file-saver'
 import { FaSadTear, FaLink, FaGlobeAsia } from 'react-icons/fa'
+import { useData } from '@context/DataContext'
 
 
 

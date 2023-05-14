@@ -1,47 +1,26 @@
 'use client'
 
-import { authorNameInterface, providerValuesInterface, useData } from '@context/DataContext'
 import axios from 'axios'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
+import { providerValuesInterface, currentAccountInterface } from '../../types/all'
+import { useData } from '@context/DataContext'
 import { FaRegCopy, FaRegTrashAlt, FaKey, FaServer } from 'react-icons/fa'
 import { PulseLoader } from 'react-spinners'
-
-interface currentAccountInterface {
-    url: string
-    name: string
-    username: string
-    entities: any
-    verified: boolean
-    profile_image_url: string
-    created_at: string
-    id: string
-    description: string
-}
+import DataStatus from './components/DataStatus'
+import LineDivider from './components/LineDivider'
 
 const TwitterIdCrawler = () => {
     const [currentAccount, setCurrentAccount] = useState<currentAccountInterface>({
-        url: "https://t.co/1cOni3oayK",
-        name: "official_IZONE",
-        username: "official_izone",
-        entities: {
-          url: {
-            urls: [
-              {
-                start: 0,
-                end: 23,
-                url: "https://t.co/1cOni3oayK",
-                expanded_url: "http://cafe.daum.net/official-izone",
-                display_url: "cafe.daum.net/official-izone"
-              }
-            ]
-          }
-        },
+        url: '',
+        name: '',
+        username: '',
+        entities: {},
         verified: true,
-        profile_image_url: "https://pbs.twimg.com/profile_images/1335600379090759681/Az89GwTv_normal.jpg",
-        created_at: "2018-08-29T10:09:00.000Z",
-        id: "1034744720537219073",
-        description: "IZ*ONE(아이즈원) OFFICIAL TWITTER"
+        profile_image_url: '',
+        created_at: '',
+        id: '',
+        description: ''
       })
     const [listOfId, setListOfId] = useState('NA')
     const [loading, setLoading] = useState(false)
@@ -94,8 +73,8 @@ const TwitterIdCrawler = () => {
             username: "official_izone",
             entities: {},
             verified: true,
-            profile_image_url: "https://pbs.twimg.com/profile_images/1335600379090759681/Az89GwTv_normal.jpg",
-            created_at: "2018-08-29T10:09:00.000Z",
+            profile_image_url: "https://pbs.twimg.com/profile_images/1335600379090759681/Az89GwTv_normal.jpg", // will be deleted and regenerated after final build
+            created_at: "2018-08-29T10:09:00.000Z", 
             id: "1034744720537219073",
             description: "IZ*ONE(아이즈원) OFFICIAL TWITTER"
           })
@@ -234,27 +213,22 @@ const TwitterIdCrawler = () => {
   return (
     <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto'>
         <form onSubmit={handleUsernameIdFetch} className='flex flex-col gap-2'>
-            <div>
-                <div className='grid grid-cols-2 items-center justify-center pb-1'>
-                    <label htmlFor='' className='block font-medium'>Username</label>
+            <div className='flex flex-col gap-1'>
+                <div className='flex flex-col justify-center gap-1'>
+                    <label htmlFor='username' className='block font-medium'>Username</label>
+                    <input type="text" id='username' className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={nextToken ? true : false} required />
                 </div>
-                <div className='flex flex-col gap-1'>
-                    <input type="text" className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={nextToken ? true : false} required />
-                </div>
-                <div className='grid grid-cols-2 items-center justify-center py-1'>
-                    <label htmlFor='' className='block font-medium'>Bearer Token</label>
-                </div>
-                <div className='flex flex-col gap-1'>
-                    <input type="text" className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={bearer} onChange={e => setBearer(e.target.value)} placeholder='Bearer Token' disabled={nextToken ? true : false} required />
+                <div className='flex flex-col justify-center gap-1'>
+                    <label htmlFor='bearerToken' className='block font-medium'>Bearer Token</label>
+                    <input type="text" id='bearerToken' className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={bearer} onChange={e => setBearer(e.target.value)} placeholder='Bearer Token' disabled={nextToken ? true : false} required />
                 </div>
             </div>
+
             <div className='flex justify-end items-center'>
-                <div className='flex gap-2'>
-                    <button type='submit' className='text-sm h-[32px] w-[90px] bg-[#61B15A] text-white hover: font-medium rounded disabled:opacity-75' disabled={!twitterUsername || !bearer}>{loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'}</button>
-                </div>
+                <button type='submit' className='text-sm h-[32px] w-[90px] bg-[#61B15A] text-white font-medium rounded disabled:opacity-75' disabled={!twitterUsername || !bearer}>{loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'}</button>
             </div>
         </form>
-<div className='h-[1px] w-full bg-white opacity-10'></div>
+        <LineDivider />
         <div className='flex flex-col gap-2'>
             <div>
                 <div className='grid grid-cols-2 items-center justify-center pb-1'>
@@ -274,7 +248,12 @@ const TwitterIdCrawler = () => {
                 </div>
             </div>
         </div>
-                        <div className='h-[1px] w-full bg-white opacity-10'></div>
+
+        <button type='button' onClick={handleTwitterPostIdCrawler} className='text-sm h-[32px] w-[90px] bg-[#4D96FF] text-white font-medium rounded disabled:opacity-60' disabled={loading || !twitterId || nextToken === 'Last'}>{loading ? <PulseLoader size={5} color="#fff" /> : nextToken ? 'Next' : 'Fetch'}</button>
+        <button type='submit' className='text-sm h-[32px] w-[90px] bg-[#61B15A] text-white font-medium rounded disabled:opacity-60' disabled={!twitterUsername || !bearer}>{loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'}</button>
+
+        
+        <LineDivider />
         <div className='grid grid-cols-2 gap-2'>
             <div>
                 <h1 className='block font-medium pb-1'>Setting</h1>
@@ -311,44 +290,26 @@ const TwitterIdCrawler = () => {
                 </div>
             </div>
         </div>
-<div className='h-[1px] w-full bg-white opacity-10'></div>
+        <LineDivider />
         <div>
             <h1 className='block font-medium pb-1'>Status</h1>
             <div className='flex flex-col gap-2 bg-[#ffffff15] p-3 text-white'>
                 <div className='grid grid-cols-2'>
-                    <div>
-                        <h3 className='text-sm font-bold'>Overall Data Collected:</h3>
-                        <p className='text-lg opacity-50 font-medium'>{finalList.length}</p>
-                    </div>
+                    <DataStatus text='Overall Data Collected' count={finalList.length} />
                     <div className='flex justify-end'>
                         {finalList.length !== 0 && <button onClick={() => handleCopy(finalList)} className='text-xl h-fit'><FaRegCopy /></button>}
                     </div>
                 </div>
                 <div className='grid grid-cols-2'>
-                    <div>
-                        <h3 className='text-sm font-bold'>Videos Fetched:</h3>
-                        <p className='text-lg opacity-50 font-medium'>{allPosts.posts ? allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'video').length : 0}</p>
-                    </div>
-                    <div>
-                        <h3 className='text-sm font-bold'>Total Videos Fetched:</h3>
-                        <p className='text-lg opacity-50 font-medium'>{totalVideos}</p>
-                    </div>
+                    <DataStatus text='Videos Fetched' count={allPosts.posts ? allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'video').length : 0} />
+                    <DataStatus text='Total Videos Fetched' count={totalVideos} />
                 </div>
                 <div className='grid grid-cols-2'>
-                    <div>
-                        <h3 className='text-sm font-bold'>Pictures Fetched:</h3>
-                        <p className='text-lg opacity-50 font-medium'>{allPosts.posts ? allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'photo').length : 0}</p>
-                    </div>
-                    <div>
-                        <h3 className='text-sm font-bold'>Total Pictures Fetched:</h3>
-                        <p className='text-lg opacity-50 font-medium'>{totalPictures}</p>
-                    </div>
+                    <DataStatus text='Pictures Fetched' count={allPosts.posts ? allPosts?.posts?.includes?.media?.filter((attach: any) => attach.type === 'photo').length : 0} />
+                    <DataStatus text='Total Pictures Fetched' count={totalPictures} />
                 </div>
                 <div className=''>
-                    <div>
-                        <h3 className='text-sm font-bold'>Total Media Fetched:</h3>
-                        <p className='text-lg opacity-50 font-medium'>{totalPictures + totalVideos}</p>
-                    </div>
+                    <DataStatus text='Total Media Fetched' count={totalPictures + totalVideos} />
                 </div>
             </div>
         </div>

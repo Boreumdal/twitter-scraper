@@ -1,0 +1,10 @@
+const DataStatus = ({ text, count }: { text: string, count: number | undefined }) => {
+    return (
+        <div>
+            <h3 className='text-sm font-bold'>{text}:</h3>
+            <p className='text-lg opacity-50 font-medium'>{count}</p>
+        </div>
+    )
+}
+
+export default DataStatus

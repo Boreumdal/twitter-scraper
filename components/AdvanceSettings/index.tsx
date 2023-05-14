@@ -1,10 +1,11 @@
 'use client'
 
-import { providerValuesInterface, useData } from '@context/DataContext'
 import React from 'react'
+import { providerValuesInterface } from '../../types/all'
+import { useData } from '@context/DataContext'
 
 const AdvanceSettings = () => {
-    const { setRestored, totalPictures, setTotalPictures, totalVideos, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, setNextToken2, advanceToggle, setAdvanceToggle, localStored, setFinalList } = useData() as providerValuesInterface
+    const { setRestored, setTotalPictures, setTotalVideos, setTwitterUsername, setNextToken2, advanceToggle, setAdvanceToggle, localStored, setFinalList } = useData() as providerValuesInterface
 
     const handleRestore = () => {
         setTwitterUsername(localStored.currentUsername)
@@ -16,7 +17,7 @@ const AdvanceSettings = () => {
         setAdvanceToggle(false)
     }
 
-    return advanceToggle && (
+    return advanceToggle ? (
         <div className='absolute inset-0 bg-[#33333383] text-white grid place-items-center'>
             <div className='w-[400px] bg-[#171717] shadow py-2'>
                 <h1 className='text-2xl font-bold py-2 mx-4 border-b border-[#363636]'>Advance Option</h1>
@@ -72,7 +73,7 @@ const AdvanceSettings = () => {
                 </div>
             </div>
         </div>
-    )
+    ) : <></>
 }
 
 export default AdvanceSettings

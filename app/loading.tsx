@@ -1,10 +1,12 @@
+'use client'
+
 import React from 'react'
-import { BounceLoader } from 'react-spinners'
+import { GridLoader } from 'react-spinners'
 
 const loading = () => {
   return (
-    <div className='h-screem w-full grid place-items-center'>
-      <BounceLoader color="#36d7b7" />
+    <div className='h-screen w-full grid place-items-center'>
+      <GridLoader color="#fff" />
     </div>
   )
 }
