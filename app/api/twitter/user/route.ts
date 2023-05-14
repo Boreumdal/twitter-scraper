@@ -1,8 +1,7 @@
-import React from 'react'
 import axios from 'axios'
 import { NextResponse } from 'next/server'
 
-const handler = async (request) => {
+const handler = async (request: Request) => {
     try {
         const { username, bearer } = await request.json()
 

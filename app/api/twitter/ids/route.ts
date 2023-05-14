@@ -1,10 +1,16 @@
-import React from 'react'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { NextResponse } from 'next/server'
 
-const handler = async (request) => {
+interface IdsInterface {
+    id: string
+    nextToken: string | null
+    bearer: string
+    maximum: string
+}
+
+const handler = async (request: Request) => {
     try {
-        const { id, nextToken, bearer, maximum } = await request.json()
+        const { id, nextToken, bearer, maximum }: IdsInterface = await request.json()
 
         const config = {
             headers: { 
@@ -12,7 +18,7 @@ const handler = async (request) => {
             }
         }
 
-        const response = await axios.get(nextToken === '' ? `https://api.twitter.com/2/users/${id}/tweets?max_results=${maximum}&expansions=referenced_tweets.id` : `https://api.twitter.com/2/users/${id}/tweets?max_results=${maximum}&expansions=referenced_tweets.id&pagination_token=${nextToken}`, config)
+        const response: AxiosResponse = await axios.get(nextToken === '' ? `https://api.twitter.com/2/users/${id}/tweets?max_results=${maximum}&expansions=referenced_tweets.id` : `https://api.twitter.com/2/users/${id}/tweets?max_results=${maximum}&expansions=referenced_tweets.id&pagination_token=${nextToken}`, config)
 
         if (response){
             return NextResponse.json({ posts: response.data })

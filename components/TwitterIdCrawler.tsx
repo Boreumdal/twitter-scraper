@@ -130,6 +130,9 @@ const TwitterIdCrawler = () => {
         }
 
         fetchHundredPosts()
+        console.log(finalList);
+        console.log(allPosts);
+        
     }, [nextToken])
 
     useEffect(() => {
