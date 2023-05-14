@@ -9,6 +9,8 @@ import { FaRegCopy, FaRegTrashAlt, FaKey, FaServer } from 'react-icons/fa'
 import { PulseLoader } from 'react-spinners'
 import DataStatus from './components/DataStatus'
 import LineDivider from './components/LineDivider'
+import Button from './components/Button'
+import ButtonSquare from './components/ButtonSquare'
 
 const TwitterIdCrawler = () => {
     const [currentAccount, setCurrentAccount] = useState<currentAccountInterface>({
@@ -225,7 +227,7 @@ const TwitterIdCrawler = () => {
             </div>
 
             <div className='flex justify-end items-center'>
-                <button type='submit' className='text-sm h-[32px] w-[90px] bg-[#61B15A] text-white font-medium rounded disabled:opacity-75' disabled={!twitterUsername || !bearer}>{loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'}</button>
+                <Button type='submit' custom='bg-[#61B15A]' disable={!twitterUsername || !bearer} text={loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'} />
             </div>
         </form>
         <LineDivider />
@@ -248,11 +250,6 @@ const TwitterIdCrawler = () => {
                 </div>
             </div>
         </div>
-
-        <button type='button' onClick={handleTwitterPostIdCrawler} className='text-sm h-[32px] w-[90px] bg-[#4D96FF] text-white font-medium rounded disabled:opacity-60' disabled={loading || !twitterId || nextToken === 'Last'}>{loading ? <PulseLoader size={5} color="#fff" /> : nextToken ? 'Next' : 'Fetch'}</button>
-        <button type='submit' className='text-sm h-[32px] w-[90px] bg-[#61B15A] text-white font-medium rounded disabled:opacity-60' disabled={!twitterUsername || !bearer}>{loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'}</button>
-
-        
         <LineDivider />
         <div className='grid grid-cols-2 gap-2'>
             <div>
@@ -278,10 +275,11 @@ const TwitterIdCrawler = () => {
                 <div className='flex flex-col gap-2'>
                     <div className='flex gap-2 justify-between'>
                         <div className='flex gap-2'>
-                            <button type='button' onClick={handleTwitterPostIdCrawler} className='text-sm h-[32px] w-[90px] bg-[#4D96FF] text-white font-medium rounded disabled:opacity-50' disabled={loading || !twitterId || nextToken === 'Last'}>{loading ? <PulseLoader size={5} color="#fff" /> : nextToken ? 'Next' : 'Fetch'}</button>
-                            {localStored && <button type='button' onClick={() => setAdvanceToggle(prev => !prev)} className='text-lg h-[32px] aspect-square bg-[#4D96FF] text-white font-medium rounded grid place-items-center disabled:opacity-50' disabled={!localStored.currentUsername}><FaServer /></button>}
+                            <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={loading || !twitterId || nextToken === 'Last'} text={loading ? <PulseLoader size={5} color="#fff" /> : nextToken ? 'Next' : 'Fetch'} />
+                            {localStored && <ButtonSquare type='button' clickSync={() => setAdvanceToggle(prev => !prev)} custom='bg-[#4D96FF]' disable={!localStored.currentUsername} text={<FaServer />} />}
                         </div>
-                        <button type='button' onClick={handleReset} className='text-lg h-[32px] aspect-square bg-[#DF2E38] text-white font-medium rounded disabled:opacity-50 grid place-items-center' disabled={loading || !nextToken}><FaRegTrashAlt /></button>
+                        
+                        <ButtonSquare type='button' clickSync={handleReset} custom='bg-[#DF2E38]' disable={loading || !nextToken} text={<FaRegTrashAlt />} />
                     </div>
                     <div className='flex items-center h-[32px] bg-[#ffffff15] rounded'>
                         <p className='h-full aspect-square grid place-items-center rounded'><FaKey /></p>
