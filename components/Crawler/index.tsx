@@ -1,15 +1,13 @@
 'use client'
 
 import axios from 'axios'
-import Image from 'next/image'
 import React, { useEffect, useReducer, useState } from 'react'
 import { providerValuesInterface, currentAccountInterface } from '../../types/all'
 import { useData } from '@context/DataContext'
-import { FaRegCopy, FaRegTrashAlt, FaKey, FaServer } from 'react-icons/fa'
+import { FaRegTrashAlt, FaKey, FaServer } from 'react-icons/fa'
 import { PulseLoader } from 'react-spinners'
-import DataStatus from './components/DataStatus'
 import LineDivider from './components/LineDivider'
-import Button from './components/Button'
+import Button from '../components/Button'
 import ButtonSquare from './components/ButtonSquare'
 import DataStatusContainer from './components/DataStatusContainer'
 import ProfileInformation from './components/ProfileInformation'
@@ -18,6 +16,10 @@ interface CrawlerStateInterface {
     loading: boolean
     loading2: boolean
     nextToken: string
+    listOfId: string
+    bearer: string
+    maximum: number
+    switcher: boolean
 }
 
 const TwitterIdCrawler = () => {
@@ -32,17 +34,17 @@ const TwitterIdCrawler = () => {
         id: '',
         description: ''
     })
-    const [state, updateState] = useReducer((prev: CrawlerStateInterface, next: any) => {
+    const [state, updateState] = useReducer((prev: CrawlerStateInterface, next: any): CrawlerStateInterface => {
         return {...prev, ...next}
     }, {
         loading: false,
         loading2: false,
         nextToken: '',
-        listOfId: 'NA'
+        listOfId: 'NA',
+        bearer: 'AAAAAAAAAAAAAAAAAAAAAPhDjAEAAAAAD5PuEFs0Dr7VCneL6fX%2BxYMbdN8%3DocnGW2z8aelSXKlt9D3ln3UGLyViRmgPRm17l1mdaXjDA2HvK8', // will be deleted and regenerated after final build
+        maximum: 10,
+        switcher: false
     })
-    const [bearer, setBearer] = useState('AAAAAAAAAAAAAAAAAAAAAPhDjAEAAAAAD5PuEFs0Dr7VCneL6fX%2BxYMbdN8%3DocnGW2z8aelSXKlt9D3ln3UGLyViRmgPRm17l1mdaXjDA2HvK8')
-    const [maximum, setMaximum] = useState(10)
-    const [switcher, setSwitcher] = useState(false)
 
     const { 
         restored, 
@@ -75,22 +77,20 @@ const TwitterIdCrawler = () => {
 
     const handleReset = () => {
         setTwitterId('')
-        updateState({ listOfId: 'NA' })
-        updateState({ nextToken: '' })
+        updateState({ listOfId: 'NA', bearer: '', nextToken: '' })
         setAllPosts({})
         setFinalList([])
-        setBearer('')
         setTwitterUsername('')
         setCurrentAccount({
-            url: "https://t.co/1cOni3oayK",
-            name: "official_IZONE",
-            username: "official_izone",
+            url: "",
+            name: "",
+            username: "",
             entities: {},
             verified: true,
-            profile_image_url: "https://pbs.twimg.com/profile_images/1335600379090759681/Az89GwTv_normal.jpg", // will be deleted and regenerated after final build
-            created_at: "2018-08-29T10:09:00.000Z", 
-            id: "1034744720537219073",
-            description: "IZ*ONE(아이즈원) OFFICIAL TWITTER"
+            profile_image_url: "", 
+            created_at: "", 
+            id: "",
+            description: ""
           })
         setTotalPictures(0)
         setTotalVideos(0)
@@ -109,7 +109,7 @@ const TwitterIdCrawler = () => {
         updateState({ loading2: true })
 
         try {
-            const response = await axios.post(`http://localhost:3000/api/twitter/user`, JSON.stringify({ username: twitterUsername, bearer }))
+            const response = await axios.post(`http://localhost:3000/api/twitter/user`, JSON.stringify({ username: twitterUsername, bearer: state.bearer }))
 
             if (response){
                 setTwitterId(response.data.user_id.data.id);
@@ -128,7 +128,7 @@ const TwitterIdCrawler = () => {
         setDataLoading(true)
 
         try {
-            const response = await axios.post('http://localhost:3000/api/twitter/ids', JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : state.nextToken, bearer, maximum: maximum < 5 || maximum > 100 ? 5 : maximum }))
+            const response = await axios.post('http://localhost:3000/api/twitter/ids', JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
             
             if (response){
                 let postIds = response.data.posts.data.map((post: any) => {
@@ -143,16 +143,17 @@ const TwitterIdCrawler = () => {
                     return post.id
                 })
                 
-                
+                const tokenAndId = {
+                    nextToken: response.data.posts.meta.next_token ? response.data.posts.meta.next_token : 'Last',
+                    listOfId: postIds.join(',')
+                }
 
                 if (restored){
                     setNextToken2('')
                     setRestored(false)
-                    updateState({ nextToken: response.data.posts.meta.next_token ? response.data.posts.meta.next_token : 'Last' })
-                    updateState({ listOfId: postIds.join(',') })
+                    updateState({ ...tokenAndId })
                 } else {
-                    updateState({ nextToken: response.data.posts.meta.next_token ? response.data.posts.meta.next_token : 'Last' })
-                    updateState({ listOfId: postIds.join(',') })
+                    updateState({ ...tokenAndId })
                 }
             }
         } catch (error){
@@ -166,7 +167,7 @@ const TwitterIdCrawler = () => {
     useEffect(() => {
         const fetchHundredPosts = async () => {
             if (state.nextToken){
-                const response = await axios.post(`http://localhost:3000/api/twitter/posts`, { ids: state.listOfId, bearer })
+                const response = await axios.post(`http://localhost:3000/api/twitter/posts`, { ids: state.listOfId, bearer: state.bearer })
 
                 if (response){
                     setLocalStored(prev => {
@@ -204,16 +205,14 @@ const TwitterIdCrawler = () => {
     }, [allPosts])
 
     useEffect(() => {
-        if (switcher){
+        if (state.switcher){
             setLocalStored(prev => {
                 return {
-                    ...prev,
-                    totalVideos: totalVideos,
-                    totalPictures: totalPictures
+                    ...prev, totalVideos, totalPictures
                 }
             })
         } else {
-            setSwitcher(true)
+            updateState({ switcher:true })
         }
 
     }, [totalVideos, totalPictures])
@@ -228,12 +227,12 @@ const TwitterIdCrawler = () => {
                     </div>
                     <div className='flex flex-col justify-center gap-1'>
                         <label htmlFor='bearerToken' className='block font-medium'>Bearer Token</label>
-                        <input type="text" id='bearerToken' className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={bearer} onChange={e => setBearer(e.target.value)} placeholder='Bearer Token' disabled={state.nextToken ? true : false} required />
+                        <input type="text" id='bearerToken' className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={state.bearer} onChange={e => updateState({ bearer: e.target.value})} placeholder='Bearer Token' disabled={state.nextToken ? true : false} required />
                     </div>
                 </div>
 
                 <div className='flex justify-end items-center'>
-                    <Button type='submit' custom='bg-[#61B15A]' disable={!twitterUsername || !bearer} text={state.loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'} />
+                    <Button type='submit' custom='bg-[#61B15A]' disable={!twitterUsername || !state.bearer} text={state.loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'} />
                 </div>
             </form>
             <LineDivider />
@@ -252,7 +251,7 @@ const TwitterIdCrawler = () => {
                         <div className='grid grid-cols-2 items-center h-[32px]'>
                             <p className='text-xs opacity-50'>Max Result</p>
                             <div className='h-full'>
-                                <input type="number" value={maximum} onChange={e => setMaximum(+e.target.value)} className='w-full bg-[#ffffff15] h-full px-2 rounded' />
+                                <input type="number" value={state.maximum} onChange={e => updateState({ maximum: +e.target.value })} className='w-full bg-[#ffffff15] h-full px-2 rounded' />
                             </div>
                         </div>
                     </div>

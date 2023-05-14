@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from 'next/link'
 import { FaTwitter, FaGithub, FaExclamationCircle } from 'react-icons/fa'
 

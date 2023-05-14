@@ -1,21 +1,21 @@
 import React from 'react'
-import DataStatus from './DataStatus'
+import DataStatus from '../../components/DataStatus'
 import { FaRegCopy } from 'react-icons/fa'
 import { postsDataInterface, finalListInterface } from '../../../types/all'
 
 const DataStatusContainer = ({ 
-        allPosts, 
-        finalList, 
-        handleCopy, 
-        totalPictures, 
-        totalVideos 
-    }: { 
-        allPosts: postsDataInterface
-        finalList: finalListInterface[]
-        handleCopy: (str: any) => void
-        totalPictures: number
-        totalVideos: number
-    }) => {
+    allPosts, 
+    finalList, 
+    handleCopy, 
+    totalPictures, 
+    totalVideos 
+}: { 
+    allPosts: postsDataInterface
+    finalList: finalListInterface[]
+    handleCopy: (str: any) => void
+    totalPictures: number
+    totalVideos: number
+}) => {
     return (
         <div>
             <h1 className='block font-medium pb-1'>Status</h1>
