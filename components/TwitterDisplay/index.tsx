@@ -9,8 +9,6 @@ import { saveAs } from 'file-saver'
 import { FaSadTear, FaLink, FaGlobeAsia } from 'react-icons/fa'
 import { useData } from '@context/DataContext'
 
-
-
 const TwitterDisplay = () => {
     const [switcher, setSwitcher] = useState(false)
     const { allPosts, finalList, setFinalList, dataLoading, autoDownload, setDataLoading, localStored, setLocalStored } = useData() as providerValuesInterface

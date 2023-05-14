@@ -5,9 +5,6 @@ import TwitterDisplay from '@components/TwitterDisplay'
 import TwitterIdCrawler from '@components/Crawler'
 import React from 'react'
 import NavigationBar from '@components/NavigationBar'
-export const metadata = {
-    title: 'Twitter Crawler'
-}
 
 const Home = () => {
     
