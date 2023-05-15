@@ -109,7 +109,7 @@ const TwitterIdCrawler = () => {
         updateState({ loading2: true })
 
         try {
-            const response = await axios.post(`http://localhost:3000/api/twitter/user`, JSON.stringify({ username: twitterUsername, bearer: state.bearer }))
+            const response = await axios.post(`https://twitter-scraper-drab.vercel.app/api/twitter/user`, JSON.stringify({ username: twitterUsername, bearer: state.bearer }))
 
             if (response){
                 setTwitterId(response.data.user_id.data.id);
@@ -128,7 +128,7 @@ const TwitterIdCrawler = () => {
         setDataLoading(true)
 
         try {
-            const response = await axios.post('http://localhost:3000/api/twitter/ids', JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
+            const response = await axios.post('https://twitter-scraper-drab.vercel.app/api/twitter/ids', JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
             
             if (response){
                 let postIds = response.data.posts.data.map((post: any) => {
@@ -167,7 +167,7 @@ const TwitterIdCrawler = () => {
     useEffect(() => {
         const fetchHundredPosts = async () => {
             if (state.nextToken){
-                const response = await axios.post(`http://localhost:3000/api/twitter/posts`, { ids: state.listOfId, bearer: state.bearer })
+                const response = await axios.post(`https://twitter-scraper-drab.vercel.app/api/twitter/posts`, { ids: state.listOfId, bearer: state.bearer })
 
                 if (response){
                     setLocalStored(prev => {
