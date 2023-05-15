@@ -14,6 +14,6 @@ const Button = ({
     custom: string
     disable?: boolean
     text: string | React.ReactElement
-}) => <button type={type} onClick={click || clickSync} className={custom + ' text-xs sm:text-sm h-[28px] sm:h-[32px] w-[80px] sm:w-[90px] bg-[#4D96FF] text-white font-medium rounded disabled:opacity-60'} disabled={disable}>{text}</button>
+}) => <button type={type} onClick={click || clickSync} className={custom + ' text-xs sm:text-sm h-[32px] w-[80px] sm:w-[90px] bg-[#4D96FF] text-white font-medium rounded disabled:opacity-60'} disabled={disable}>{text}</button>
 
 export default Button

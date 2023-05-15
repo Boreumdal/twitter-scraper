@@ -230,16 +230,16 @@ const TwitterIdCrawler = () => {
             </div>}
 
             <div className={(mobileNav ? 'flex' : 'hidden') + ' relative flex-col w-full h-full z-10'}>
-                <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto mx-2 mb-2 my-0 text-sm sm:m-0 sm:text-base'>
+                <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto mx-2 mb-2 my-0 sm:m-0 text-base'>
                     <form onSubmit={handleUsernameIdFetch} className='flex flex-col gap-2'>
                         <div className='flex flex-col gap-1'>
                             <div className='flex flex-col justify-center gap-1'>
                                 <label htmlFor='username' className='block font-medium'>Username</label>
-                                <input type="text" id='username' className='block w-full h-[32px] sm:h-[35px] bg-[#ffffff15] text-xs sm:text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={state.nextToken ? true : false} required />
+                                <input type="text" id='username' className='block w-full h-[32px] bg-[#ffffff15] text-xs sm:text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={state.nextToken ? true : false} required />
                             </div>
                             <div className='flex flex-col justify-center gap-1'>
                                 <label htmlFor='bearerToken' className='block font-medium'>Bearer Token</label>
-                                <input type="text" id='bearerToken' className='block w-full h-[32px] sm:h-[35px] bg-[#ffffff15] text-xs sm:text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={state.bearer} onChange={e => updateState({ bearer: e.target.value})} placeholder='Bearer Token' disabled={state.nextToken ? true : false} required />
+                                <input type="text" id='bearerToken' className='block w-full h-[32px] bg-[#ffffff15] text-xs sm:text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={state.bearer} onChange={e => updateState({ bearer: e.target.value})} placeholder='Bearer Token' disabled={state.nextToken ? true : false} required />
                             </div>
                         </div>
 
@@ -250,17 +250,17 @@ const TwitterIdCrawler = () => {
                     <LineDivider />
                     <ProfileInformation currentAccount={currentAccount} />
                     <LineDivider />
-                    <div className='grid grid-cols-2 gap-2'>
+                    <div className='grid grid-cols-2 gap-2 justify-between'>
                         <div>
                             <h1 className='block font-medium pb-1'>Setting</h1>
                             <div className='flex flex-col gap-2'>
-                                <div className='grid grid-cols-2 items-center h-[28px] gap-2 sm:h-[32px] sm:gap-1'>
+                                <div className='grid grid-cols-2 items-center h-[32px] gap-2 sm:gap-1'>
                                     <p className='text-xs opacity-50'>Auto Download</p>
                                     <div>
                                         <input type="checkbox" checked={autoDownload} onChange={e => setAutoDownload(e.target.checked)} />
                                     </div>
                                 </div>
-                                <div className='grid grid-cols-2 items-center h-[28px] gap-2 sm:h-[32px] sm:gap-1'>
+                                <div className='grid grid-cols-2 items-center gap-2 h-[32px] sm:gap-1'>
                                     <p className='text-xs opacity-50'>Max Result</p>
                                     <div className='h-full'>
                                         <input type="number" value={state.maximum} onChange={e => updateState({ maximum: +e.target.value })} className='w-full bg-[#ffffff15] h-full px-2 rounded' />
@@ -280,7 +280,7 @@ const TwitterIdCrawler = () => {
                                     
                                     <ButtonSquare type='button' clickSync={handleReset} custom='bg-[#DF2E38]' disable={state.loading || !state.nextToken} text={<FaRegTrashAlt />} />
                                 </div>
-                                <div className='flex items-center h-[28px] sm:h-[32px] bg-[#ffffff15] rounded'>
+                                <div className='flex items-center h-[32px] bg-[#ffffff15] rounded'>
                                     <p className='h-full aspect-square grid place-items-center rounded'><FaKey /></p>
                                     <input type="text" className='block w-full h-full bg-transparent text-xs sm:text-sm outline-none text-white rounded disabled:opacity-75' value={nextToken2 ? nextToken2 : state.nextToken} onChange={e => setNextToken2(e.target.value)} placeholder='Continuation token' />
                                 </div>
