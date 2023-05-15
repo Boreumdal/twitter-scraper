@@ -108,6 +108,7 @@ const TwitterIdCrawler = () => {
         })
     }
 
+    // USER
     const handleUsernameIdFetch = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         updateState({ loading2: true })
@@ -130,8 +131,6 @@ const TwitterIdCrawler = () => {
     const handleTwitterPostIdCrawler = async () => {
         updateState({ loading: true })
         setDataLoading(true)
-
-
 
         try {
             const response = await axios.post(`${origin}/api/twitter/ids`, JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
@@ -204,7 +203,6 @@ const TwitterIdCrawler = () => {
             setTotalVideos(prev => {
                 return prev + allPosts.posts?.includes.media?.filter((attach: any) => attach.type === 'video').length!
             })
-            
         }
         
         

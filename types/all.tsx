@@ -28,6 +28,7 @@ export interface finalListInterface {
     created_at: string
     lang: string
     text: string
+    links: string[]
     images: string[]
     author_name: authorNameInterface
     referenced_tweets?: any
@@ -109,6 +110,8 @@ export interface providerValuesInterface {
     setTotalVideos: React.Dispatch<React.SetStateAction<number>>
     twitterId: string
     setTwitterId: React.Dispatch<React.SetStateAction<string>>
+    downloadedPhotoLinks: string[]
+    setDownloadedPhotoLinks: React.Dispatch<React.SetStateAction<string[]>>
     twitterUsername: string
     setTwitterUsername: React.Dispatch<React.SetStateAction<string>>
     nextToken2: string

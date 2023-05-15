@@ -11,7 +11,7 @@ import { useData } from '@context/DataContext'
 
 const TwitterDisplay = () => {
     const [switcher, setSwitcher] = useState(false)
-    const { allPosts, finalList, setFinalList, dataLoading, autoDownload, setDataLoading, localStored, setLocalStored } = useData() as providerValuesInterface
+    const { allPosts, finalList, setFinalList, dataLoading, autoDownload, setDataLoading, localStored, setDownloadedPhotoLinks, setLocalStored } = useData() as providerValuesInterface
     
     const handleDownload = (link: string) => {
         saveAs(link + '?format=jpg&name=4096x4096', link.match(/media\/(.*)/)![1])
@@ -26,16 +26,18 @@ const TwitterDisplay = () => {
                     created_at: post.created_at,
                     lang: post.lang,
                     text: post.text,
+                    links: [],
                     images: [],
                     author_name: allPosts.posts?.includes.users?.filter((user: authorNameInterface) => user.id === post.author_id)[0] as authorNameInterface
                 }
 
                 let temp: string[] = []
+                let temp2: string[] = []
 
                 post?.attachments?.media_keys?.forEach((key: any) => {
                     allPosts.posts?.includes.media?.forEach((attach: any) => {
                         if (attach.type === 'photo' && attach.media_key === key){
-                            temp.push(`collection/media/${attach.url.match(/media\/(.*)/)[1]}.jpg`)
+                            temp.push(`collection/media/${attach.url.match(/media\/(.*)/)[1]}`)
                         }
                         if (attach.type === 'video' && attach.media_key === key){
                             post?.entities.urls.map((url: any) => {
@@ -43,12 +45,23 @@ const TwitterDisplay = () => {
                                     temp.push(`collection/media/${url.url.match(/t.co\/(.*)/)[1]}.mp4`)
                                 }
                             })
-                            
+                        }
+                        if (attach.type === 'animated_gif' && attach.media_key === key){
+                            post?.entities.urls.map((url: any) => {
+                                if (url.media_key === key){
+                                    temp.push(`collection/media/${url.url.match(/t.co\/(.*)/)[1]}.gif`)
+                                }
+                            })
                         }
                     })
                 })
 
+                post.entities?.urls?.map((url: any) => {
+                    temp2.push(url?.expanded_url)
+                })
+
                 newList['images'] = temp
+                newList['links'] = temp2
 
                 if (post.referenced_tweets){
                     newList['referenced_tweets'] = post.referenced_tweets
@@ -68,11 +81,10 @@ const TwitterDisplay = () => {
             allPosts.posts?.includes.media?.forEach((attach: any) => {
                 if (attach.type === 'photo' && autoDownload){
                     handleDownload(attach.url)
+                    setDownloadedPhotoLinks(prev => [...prev, attach.url])
                 }
             })
-            
         }
-
     }, [allPosts])
 
     useEffect(() => {
@@ -92,6 +104,10 @@ const TwitterDisplay = () => {
     const handleVideoCopy = (link: any) => {
         if (link.includes('video')){
             let data = link.split('video')[0]
+            navigator.clipboard.writeText(data)
+        }
+        if (link.includes('photo')){
+            let data = link.split('photo')[0]
             navigator.clipboard.writeText(data)
         }
     }
@@ -134,14 +150,35 @@ const TwitterDisplay = () => {
                                             if (url.media_key === key){
                                                 return (
                                                     <div key={key} className='grid grid-cols-2 h-[38px] items-center bg-[#ffffff15] border-l-4 border-transparent border-l-[#DF2E38] pr-2'>
-                                                        <div className='cursor-pointer'>
-                                                            <span onClick={() => handleCopy(url.url.match(/t.co\/(.*)/)[1])} className='text-sm font-medium truncate hover:bg-[#ffffff3b] ml-1 px-1'>ID: {url.url.match(/t.co\/(.*)/)[1]}</span>
+                                                        <div className=''>
+                                                            <span onClick={() => handleCopy(url.url.match(/t.co\/(.*)/)[1])} className='cursor-pointer text-sm font-medium truncate hover:bg-[#ffffff3b] ml-1 px-1'>ID: {url.url.match(/t.co\/(.*)/)[1]}</span>
                                                         </div>
                                                         <div className='flex items-center justify-end gap-2'>
                                                             <button onClick={() => handleVideoCopy(url.expanded_url)} className='text-xl'>
                                                                 <FaLink />
                                                             </button>
-                                                            <Link href='https://twdown.net/index.php' target='_blank' className='text-xl'>
+                                                            <Link href='https://redketchup.io/twitter-downloader' target='_blank' className='text-xl'>
+                                                                <FaGlobeAsia />
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })
+                                    }
+                                    if (attach.type === 'animated_gif' && attach.media_key === key){
+                                        return post?.entities.urls.map((url: any) => {
+                                            if (url.media_key === key){
+                                                return (
+                                                    <div key={key} className='grid grid-cols-2 h-[38px] items-center bg-[#ffffff15] border-l-4 border-transparent border-l-[#2e78df] pr-2'>
+                                                        <div className=''>
+                                                            <span onClick={() => handleCopy(url.url.match(/t.co\/(.*)/)[1])} className='cursor-pointer text-sm font-medium truncate hover:bg-[#ffffff3b] ml-1 px-1'>ID: {url.url.match(/t.co\/(.*)/)[1]}</span>
+                                                        </div>
+                                                        <div className='flex items-center justify-end gap-2'>
+                                                            <button onClick={() => handleVideoCopy(url.expanded_url)} className='text-xl'>
+                                                                <FaLink />
+                                                            </button>
+                                                            <Link href='https://redketchup.io/twitter-downloader' target='_blank' className='text-xl'>
                                                                 <FaGlobeAsia />
                                                             </Link>
                                                         </div>

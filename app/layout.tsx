@@ -3,6 +3,9 @@ import './globals.css'
 
 export const metadata = {
   title: 'Twitter Renderer - Melvin Arellano',
+  icons: {
+    icon: '/favico.ico',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
