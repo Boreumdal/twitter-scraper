@@ -54,8 +54,8 @@ const AdvanceSettings = () => {
                             <span className='leading-none'>Advance Action Tab</span>
                             <span className='text-[10px] text-[#ffffff53] self-end'>For Debugging</span>
                         </h1>
-                        <div >
-                            <button onClick={() => console.log(downloadedPhotoLinks)} className='rounded py-1 px-2 border'>Downloaded Links</button>
+                        <div className='mt-1'>
+                            <button onClick={() => console.log(downloadedPhotoLinks)} className='rounded w-full text-left px-2 text-sm font-medium h-[32px] bg-[#ffffff15]'>Logs Downloaded Links</button>
                         </div>
                     </div>
                 )}
