@@ -22,7 +22,10 @@ interface CrawlerStateInterface {
     switcher: boolean
 }
 
+const origin = process.env.NEXT_PUBLIC_DEVELOPMENT_ENV === 'production' ? 'https://twitter-scraper-drab.vercel.app' : 'http://localhost:3000'
+
 const TwitterIdCrawler = () => {
+
     const [currentAccount, setCurrentAccount] = useState<currentAccountInterface>({
         url: '',
         name: '',
@@ -47,8 +50,8 @@ const TwitterIdCrawler = () => {
     })
 
     const { 
-        restored, 
-        setRestored, 
+        isRestore, 
+        setIsRestore,
         totalPictures, 
         setTotalPictures, 
         totalVideos, 
@@ -108,8 +111,11 @@ const TwitterIdCrawler = () => {
         e.preventDefault()
         updateState({ loading2: true })
 
+        console.log(origin);
+        
+
         try {
-            const response = await axios.post(`https://twitter-scraper-drab.vercel.app/api/twitter/user`, JSON.stringify({ username: twitterUsername, bearer: state.bearer }))
+            const response = await axios.post(`${origin}/api/twitter/user`, JSON.stringify({ username: twitterUsername, bearer: state.bearer }))
 
             if (response){
                 setTwitterId(response.data.user_id.data.id);
@@ -127,8 +133,10 @@ const TwitterIdCrawler = () => {
         updateState({ loading: true })
         setDataLoading(true)
 
+
+
         try {
-            const response = await axios.post('https://twitter-scraper-drab.vercel.app/api/twitter/ids', JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
+            const response = await axios.post(`${origin}/api/twitter/ids`, JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
             
             if (response){
                 let postIds = response.data.posts.data.map((post: any) => {
@@ -148,9 +156,9 @@ const TwitterIdCrawler = () => {
                     listOfId: postIds.join(',')
                 }
 
-                if (restored){
+                if (isRestore){
                     setNextToken2('')
-                    setRestored(false)
+                    setIsRestore(false)
                     updateState({ ...tokenAndId })
                 } else {
                     updateState({ ...tokenAndId })
@@ -167,7 +175,7 @@ const TwitterIdCrawler = () => {
     useEffect(() => {
         const fetchHundredPosts = async () => {
             if (state.nextToken){
-                const response = await axios.post(`https://twitter-scraper-drab.vercel.app/api/twitter/posts`, { ids: state.listOfId, bearer: state.bearer })
+                const response = await axios.post(`${origin}/api/twitter/posts`, { ids: state.listOfId, bearer: state.bearer })
 
                 if (response){
                     setLocalStored(prev => {

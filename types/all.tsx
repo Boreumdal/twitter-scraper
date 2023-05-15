@@ -99,8 +99,8 @@ export interface postsDataInterface {
 }
 
 export interface providerValuesInterface {
-    restored: boolean
-    setRestored: React.Dispatch<React.SetStateAction<boolean>>
+    isRestore: boolean
+    setIsRestore: React.Dispatch<React.SetStateAction<boolean>>
     totalPictures: number
     setTotalPictures: React.Dispatch<React.SetStateAction<number>>
     totalVideos: number

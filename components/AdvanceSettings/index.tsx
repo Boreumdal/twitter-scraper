@@ -8,7 +8,7 @@ import DataAccountInfoContainer from './components/DataAccountInfoContainer'
 import Button from '@components/components/Button'
 
 const AdvanceSettings = () => {
-    const { setRestored, setTotalPictures, setTotalVideos, setTwitterUsername, setNextToken2, advanceToggle, setAdvanceToggle, localStored, setFinalList } = useData() as providerValuesInterface
+    const { setIsRestore, setTotalPictures, setTotalVideos, setTwitterUsername, setNextToken2, advanceToggle, setAdvanceToggle, localStored, setFinalList } = useData() as providerValuesInterface
 
     const handleRestore = () => {
         setTwitterUsername(localStored.currentUsername)
@@ -16,7 +16,7 @@ const AdvanceSettings = () => {
         setFinalList(localStored.finalListPosts)
         setTotalVideos(localStored.totalVideos)
         setTotalPictures(localStored.totalPictures)
-        setRestored(true)
+        setIsRestore(true)
         setAdvanceToggle(false)
     }
 

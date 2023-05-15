@@ -8,6 +8,8 @@ interface IdsInterface {
     maximum: string
 }
 
+const origin = process.env.DEVELOPMENT_ENV === 'production' ? 'https://twitter-scraper-drab.vercel.app' : 'http://localhost:3000'
+
 const handler = async (request: Request) => {
     try {
         const { id, nextToken, bearer, maximum }: IdsInterface = await request.json()
@@ -23,7 +25,7 @@ const handler = async (request: Request) => {
         if (response){
             return new NextResponse(JSON.stringify({ posts: response.data }), {
                 headers: {
-                'Access-Control-Allow-Origin': 'https://twitter-scraper-drab.vercel.app',
+                'Access-Control-Allow-Origin': origin,
                 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
               }

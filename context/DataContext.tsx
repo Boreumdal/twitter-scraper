@@ -26,9 +26,9 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
     
     const [totalPictures, setTotalPictures] = useState<number>(0)
     const [totalVideos, setTotalVideos] = useState<number>(0)
-    const [restored, setRestored] = useState<boolean>(false)
+    const [isRestore, setIsRestore] = useState<boolean>(false)
 
-    const providerValues: providerValuesInterface | null = { totalPictures, setTotalPictures, totalVideos, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, restored, setRestored,  }
+    const providerValues: providerValuesInterface | null = { totalPictures, setTotalPictures, totalVideos, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, isRestore, setIsRestore }
 
     useEffect(() => {
         const stored = localStorage.getItem('mlv')
