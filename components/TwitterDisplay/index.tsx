@@ -114,7 +114,7 @@ const TwitterDisplay = () => {
                     </div>
                 )
                 : allPosts.posts?.data.map((post: any, idx: number) => (
-                <div key={idx} className='bg-[#171717] p-4 grid grid-cols-2 gap-1'>
+                <div key={idx} className='bg-[#171717] p-4 flex flex-col sm:grid sm:grid-cols-2 gap-2'>
                     <div>
                         <p className='whitespace-pre-line'>{post.text}</p>
                     </div>
