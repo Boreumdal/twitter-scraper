@@ -27,7 +27,7 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
     const [totalPictures, setTotalPictures] = useState<number>(0)
     const [totalVideos, setTotalVideos] = useState<number>(0)
     const [isRestore, setIsRestore] = useState<boolean>(false)
-    const [mobileNav, setMobileNav] = useState<boolean>(false)
+    const [mobileNav, setMobileNav] = useState<boolean>(true)
 
     const providerValues: providerValuesInterface | null = { totalPictures, setTotalPictures, totalVideos, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, isRestore, setIsRestore, mobileNav, setMobileNav }
 
