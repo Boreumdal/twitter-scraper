@@ -50,8 +50,6 @@ const TwitterIdCrawler = () => {
     })
 
     const { 
-        isRestore, 
-        setIsRestore,
         totalPictures, 
         setTotalPictures, 
         totalVideos, 
@@ -71,7 +69,10 @@ const TwitterIdCrawler = () => {
         setAutoDownload, 
         setAdvanceToggle, 
         localStored, 
-        setLocalStored 
+        setLocalStored,
+        isRestore, 
+        setIsRestore,
+        mobileNav,
     } = useData() as providerValuesInterface
 
     const handleCopy = (str: any) => {
@@ -110,9 +111,6 @@ const TwitterIdCrawler = () => {
     const handleUsernameIdFetch = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         updateState({ loading2: true })
-
-        console.log(origin);
-        
 
         try {
             const response = await axios.post(`${origin}/api/twitter/user`, JSON.stringify({ username: twitterUsername, bearer: state.bearer }))
@@ -226,66 +224,135 @@ const TwitterIdCrawler = () => {
     }, [totalVideos, totalPictures])
 
     return (
-        <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto'>
-            <form onSubmit={handleUsernameIdFetch} className='flex flex-col gap-2'>
-                <div className='flex flex-col gap-1'>
-                    <div className='flex flex-col justify-center gap-1'>
-                        <label htmlFor='username' className='block font-medium'>Username</label>
-                        <input type="text" id='username' className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={state.nextToken ? true : false} required />
-                    </div>
-                    <div className='flex flex-col justify-center gap-1'>
-                        <label htmlFor='bearerToken' className='block font-medium'>Bearer Token</label>
-                        <input type="text" id='bearerToken' className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={state.bearer} onChange={e => updateState({ bearer: e.target.value})} placeholder='Bearer Token' disabled={state.nextToken ? true : false} required />
-                    </div>
-                </div>
+        <>
+            {mobileNav && <div className='relative flex sm:hidden flex-col w-full h-full z-10'>
+                <div className='bg-[#171717] p-4 flex-col justify-between h-full overflow-auto flex mx-2 my-2 text-sm'>
+                    <form onSubmit={handleUsernameIdFetch} className='flex flex-col gap-2'>
+                        <div className='flex flex-col gap-1'>
+                            <div className='flex flex-col justify-center gap-1'>
+                                <label htmlFor='username' className='block font-medium'>Username</label>
+                                <input type="text" id='username' className='block w-full h-[32px] text-xs bg-[#ffffff15] outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={state.nextToken ? true : false} required />
+                            </div>
+                            <div className='flex flex-col justify-center gap-1'>
+                                <label htmlFor='bearerToken' className='block font-medium'>Bearer Token</label>
+                                <input type="text" id='bearerToken' className='block w-full h-[32px] text-xs bg-[#ffffff15] outline-none text-white px-2 rounded disabled:opacity-75' value={state.bearer} onChange={e => updateState({ bearer: e.target.value})} placeholder='Bearer Token' disabled={state.nextToken ? true : false} required />
+                            </div>
+                        </div>
 
-                <div className='flex justify-end items-center'>
-                    <Button type='submit' custom='bg-[#61B15A]' disable={!twitterUsername || !state.bearer} text={state.loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'} />
-                </div>
-            </form>
-            <LineDivider />
-            <ProfileInformation currentAccount={currentAccount} />
-            <LineDivider />
-            <div className='grid grid-cols-2 gap-2'>
-                <div>
-                    <h1 className='block font-medium pb-1'>Setting</h1>
-                    <div className='flex flex-col gap-2'>
-                        <div className='grid grid-cols-2 items-center h-[32px]'>
-                            <p className='text-xs opacity-50'>Auto Download</p>
-                            <div>
-                                <input type="checkbox" checked={autoDownload} onChange={e => setAutoDownload(e.target.checked)} />
-                            </div>
+                        <div className='flex justify-end items-center'>
+                            <Button type='submit' custom='bg-[#61B15A]' disable={!twitterUsername || !state.bearer} text={state.loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'} />
                         </div>
-                        <div className='grid grid-cols-2 items-center h-[32px]'>
-                            <p className='text-xs opacity-50'>Max Result</p>
-                            <div className='h-full'>
-                                <input type="number" value={state.maximum} onChange={e => updateState({ maximum: +e.target.value })} className='w-full bg-[#ffffff15] h-full px-2 rounded' />
+                    </form>
+                    <LineDivider />
+                    <ProfileInformation currentAccount={currentAccount} />
+                    <LineDivider />
+                    <div className='grid grid-cols-2 gap-2'>
+                        <div>
+                            <h1 className='block font-medium pb-1'>Setting</h1>
+                            <div className='flex flex-col gap-2'>
+                                <div className='grid grid-cols-2 items-center h-[28px] gap-2'>
+                                    <p className='text-xs opacity-50'>Auto Download</p>
+                                    <div>
+                                        <input type="checkbox" checked={autoDownload} onChange={e => setAutoDownload(e.target.checked)} />
+                                    </div>
+                                </div>
+                                <div className='grid grid-cols-2 items-center h-[28px] gap-2'>
+                                    <p className='text-xs opacity-50'>Max Result</p>
+                                    <div className='h-full'>
+                                        <input type="number" value={state.maximum} onChange={e => updateState({ maximum: +e.target.value })} className='w-full bg-[#ffffff15] h-full px-2 rounded' />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                </div>
-                <div>
-                    <h1 className='block font-medium pb-1'>Actions</h1>
-                    <div className='flex flex-col gap-2'>
-                        <div className='flex gap-2 justify-between'>
-                            <div className='flex gap-2'>
-                                <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
-                                {localStored && <ButtonSquare type='button' clickSync={() => setAdvanceToggle(prev => !prev)} custom='bg-[#4D96FF]' disable={!localStored.currentUsername} text={<FaServer />} />}
-                            </div>
-                            
-                            <ButtonSquare type='button' clickSync={handleReset} custom='bg-[#DF2E38]' disable={state.loading || !state.nextToken} text={<FaRegTrashAlt />} />
                         </div>
-                        <div className='flex items-center h-[32px] bg-[#ffffff15] rounded'>
-                            <p className='h-full aspect-square grid place-items-center rounded'><FaKey /></p>
-                            <input type="text" className='block w-full h-full bg-transparent text-sm outline-none text-white rounded disabled:opacity-75' value={nextToken2 ? nextToken2 : state.nextToken} onChange={e => setNextToken2(e.target.value)} placeholder='Continuation token' />
+                        <div>
+                            <h1 className='block font-medium pb-1'>Actions</h1>
+                            <div className='flex flex-col gap-2'>
+                                <div className='flex gap-2 justify-between'>
+                                    <div className='flex gap-2'>
+                                        <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
+                                        {localStored && <ButtonSquare type='button' clickSync={() => setAdvanceToggle(prev => !prev)} custom='bg-[#4D96FF]' disable={!localStored.currentUsername} text={<FaServer />} />}
+                                    </div>
+                                    
+                                    <ButtonSquare type='button' clickSync={handleReset} custom='bg-[#DF2E38]' disable={state.loading || !state.nextToken} text={<FaRegTrashAlt />} />
+                                </div>
+                                <div className='flex items-center h-[28px] bg-[#ffffff15] rounded'>
+                                    <p className='h-full aspect-square grid place-items-center rounded'><FaKey /></p>
+                                    <input type="text" className='block w-full h-full bg-transparent text-xs outline-none text-white rounded disabled:opacity-75' value={nextToken2 ? nextToken2 : state.nextToken} onChange={e => setNextToken2(e.target.value)} placeholder='Continuation token' />
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <LineDivider />
+                    <DataStatusContainer allPosts={allPosts} finalList={finalList} handleCopy={handleCopy} totalPictures={totalPictures} totalVideos={totalVideos} />
                 </div>
+            </div>}
+
+            <div className='absolute block sm:hidden h-fit bottom-3 left-3'>
+                <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
             </div>
-            <LineDivider />
-            <DataStatusContainer allPosts={allPosts} finalList={finalList} handleCopy={handleCopy} totalPictures={totalPictures} totalVideos={totalVideos} />
-        </div>
+
+            <div className='bg-[#171717] p-4 flex-col justify-between h-full overflow-auto hidden sm:flex'>
+                <form onSubmit={handleUsernameIdFetch} className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-1'>
+                        <div className='flex flex-col justify-center gap-1'>
+                            <label htmlFor='username' className='block font-medium'>Username</label>
+                            <input type="text" id='username' className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={state.nextToken ? true : false} required />
+                        </div>
+                        <div className='flex flex-col justify-center gap-1'>
+                            <label htmlFor='bearerToken' className='block font-medium'>Bearer Token</label>
+                            <input type="text" id='bearerToken' className='block w-full h-[35px] bg-[#ffffff15] text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={state.bearer} onChange={e => updateState({ bearer: e.target.value})} placeholder='Bearer Token' disabled={state.nextToken ? true : false} required />
+                        </div>
+                    </div>
+
+                    <div className='flex justify-end items-center'>
+                        <Button type='submit' custom='bg-[#61B15A]' disable={!twitterUsername || !state.bearer} text={state.loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'} />
+                    </div>
+                </form>
+                <LineDivider />
+                <ProfileInformation currentAccount={currentAccount} />
+                <LineDivider />
+                <div className='grid grid-cols-2 gap-2'>
+                    <div>
+                        <h1 className='block font-medium pb-1'>Setting</h1>
+                        <div className='flex flex-col gap-2'>
+                            <div className='grid grid-cols-2 items-center h-[32px]'>
+                                <p className='text-xs opacity-50'>Auto Download</p>
+                                <div>
+                                    <input type="checkbox" checked={autoDownload} onChange={e => setAutoDownload(e.target.checked)} />
+                                </div>
+                            </div>
+                            <div className='grid grid-cols-2 items-center h-[32px]'>
+                                <p className='text-xs opacity-50'>Max Result</p>
+                                <div className='h-full'>
+                                    <input type="number" value={state.maximum} onChange={e => updateState({ maximum: +e.target.value })} className='w-full bg-[#ffffff15] h-full px-2 rounded' />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div>
+                        <h1 className='block font-medium pb-1'>Actions</h1>
+                        <div className='flex flex-col gap-2'>
+                            <div className='flex gap-2 justify-between'>
+                                <div className='flex gap-2'>
+                                    <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
+                                    {localStored && <ButtonSquare type='button' clickSync={() => setAdvanceToggle(prev => !prev)} custom='bg-[#4D96FF]' disable={!localStored.currentUsername} text={<FaServer />} />}
+                                </div>
+                                
+                                <ButtonSquare type='button' clickSync={handleReset} custom='bg-[#DF2E38]' disable={state.loading || !state.nextToken} text={<FaRegTrashAlt />} />
+                            </div>
+                            <div className='flex items-center h-[32px] bg-[#ffffff15] rounded'>
+                                <p className='h-full aspect-square grid place-items-center rounded'><FaKey /></p>
+                                <input type="text" className='block w-full h-full bg-transparent text-sm outline-none text-white rounded disabled:opacity-75' value={nextToken2 ? nextToken2 : state.nextToken} onChange={e => setNextToken2(e.target.value)} placeholder='Continuation token' />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <LineDivider />
+                <DataStatusContainer allPosts={allPosts} finalList={finalList} handleCopy={handleCopy} totalPictures={totalPictures} totalVideos={totalVideos} />
+            </div>
+        </>
     )
 }
 

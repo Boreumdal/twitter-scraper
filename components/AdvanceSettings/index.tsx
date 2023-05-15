@@ -22,8 +22,8 @@ const AdvanceSettings = () => {
 
 
     return advanceToggle ? (
-        <div className='absolute inset-0 bg-[#33333383] text-white grid place-items-center'>
-            <div className='w-[400px] bg-[#171717] shadow py-2'>
+        <div className='absolute inset-0 bg-[#33333383] text-white grid place-items-center px-2 z-50'>
+            <div className='w-full sm:w-[400px] bg-[#171717] shadow py-2'>
                 <h1 className='text-2xl font-bold py-2 mx-4 border-b border-[#363636]'>Advance Option</h1>
                 <div className='px-6 py-2'>
                     <h1 className='font-medium'>Restore Previous Data</h1>

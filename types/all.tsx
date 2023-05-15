@@ -99,6 +99,8 @@ export interface postsDataInterface {
 }
 
 export interface providerValuesInterface {
+    mobileNav: boolean
+    setMobileNav: React.Dispatch<React.SetStateAction<boolean>>
     isRestore: boolean
     setIsRestore: React.Dispatch<React.SetStateAction<boolean>>
     totalPictures: number
