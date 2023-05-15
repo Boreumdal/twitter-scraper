@@ -14,7 +14,13 @@ const handler = async (request: Request) => {
         const response = await axios.get(`https://api.twitter.com/2/users/by/username/${username}?user.fields=created_at,description,entities,id,location,name,url,username,verified,profile_image_url`, config)
 
         if (response){
-            return NextResponse.json({ user_id: response.data })
+            return new NextResponse(JSON.stringify({ user_id: response.data }), {
+                headers: {
+                'Access-Control-Allow-Origin': 'https://twitter-scraper-drab.vercel.app',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+              }
+            })
         }
         
     } catch (error){
