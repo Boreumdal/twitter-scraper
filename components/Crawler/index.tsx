@@ -230,7 +230,7 @@ const TwitterIdCrawler = () => {
             </div>}
 
             <div className={(mobileNav ? 'flex' : 'hidden') + ' relative flex-col w-full h-full z-10'}>
-                <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto m-2 text-sm sm:m-0 sm:text-base'>
+                <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto mx-2 mb-2 my-0 text-sm sm:m-0 sm:text-base'>
                     <form onSubmit={handleUsernameIdFetch} className='flex flex-col gap-2'>
                         <div className='flex flex-col gap-1'>
                             <div className='flex flex-col justify-center gap-1'>
