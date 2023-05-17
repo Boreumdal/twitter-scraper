@@ -11,6 +11,7 @@ import Button from '../components/Button'
 import ButtonSquare from './components/ButtonSquare'
 import DataStatusContainer from './components/DataStatusContainer'
 import ProfileInformation from './components/ProfileInformation'
+import IndentityForm from './components/IndentityForm'
 
 const origin = process.env.NEXT_PUBLIC_DEVELOPMENT_ENV === 'production' ? process.env.NEXT_PUBLIC_MAIN_URL : 'http://localhost:3000'
 
@@ -219,22 +220,7 @@ const TwitterIdCrawler = () => {
 
             <div className={(mobileNav ? 'flex' : 'hidden') + ' relative flex-col w-full h-full z-10'}>
                 <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto mx-2 mb-2 my-0 sm:m-0 text-base'>
-                    <form onSubmit={handleUsernameIdFetch} className='flex flex-col gap-2'>
-                        <div className='flex flex-col gap-1'>
-                            <div className='flex flex-col justify-center gap-1'>
-                                <label htmlFor='username' className='block font-medium'>Username</label>
-                                <input type="text" id='username' className='block w-full h-[32px] bg-[#ffffff15] text-xs sm:text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={state.nextToken ? true : false} required />
-                            </div>
-                            <div className='flex flex-col justify-center gap-1'>
-                                <label htmlFor='bearerToken' className='block font-medium'>Bearer Token</label>
-                                <input type="text" id='bearerToken' className='block w-full h-[32px] bg-[#ffffff15] text-xs sm:text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={state.bearer} onChange={e => updateState({ bearer: e.target.value})} placeholder='Bearer Token' disabled={state.nextToken ? true : false} required />
-                            </div>
-                        </div>
-
-                        <div className='flex justify-end items-center'>
-                            <Button type='submit' custom='bg-[#61B15A]' disable={!twitterUsername || !state.bearer} text={state.loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'} />
-                        </div>
-                    </form>
+                    <IndentityForm setTwitterUsername={setTwitterUsername} handleUsernameIdFetch={handleUsernameIdFetch} twitterUsername={twitterUsername} state={state} updateState={updateState} />
                     <LineDivider />
                     <ProfileInformation currentAccount={currentAccount} />
                     <LineDivider />
@@ -255,7 +241,6 @@ const TwitterIdCrawler = () => {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div>
                             <h1 className='block font-medium pb-1'>Actions</h1>
