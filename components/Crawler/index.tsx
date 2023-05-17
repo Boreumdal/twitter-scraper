@@ -12,7 +12,7 @@ import ButtonSquare from './components/ButtonSquare'
 import DataStatusContainer from './components/DataStatusContainer'
 import ProfileInformation from './components/ProfileInformation'
 
-const origin = process.env.NEXT_PUBLIC_DEVELOPMENT_ENV === 'production' ? 'https://twitter-scraper-drab.vercel.app' : 'http://localhost:3000'
+const origin = process.env.NEXT_PUBLIC_DEVELOPMENT_ENV === 'production' ? process.env.NEXT_PUBLIC_MAIN_URL : 'http://localhost:3000'
 
 const TwitterIdCrawler = () => {
 

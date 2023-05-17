@@ -31,7 +31,7 @@ export interface AuthorNameInterface {
     verified: boolean
 }
 
-export interface finalListInterface {
+export interface FinalListInterface {
     id: string
     author_id: string
     created_at: string
@@ -47,7 +47,7 @@ export interface LocalStoredInterface {
     currentUsername: string
     currentId: string
     nextToken: string
-    finalListPosts: finalListInterface[]
+    finalListPosts: FinalListInterface[]
     totalVideos: number
     totalPictures: number
 }
@@ -143,8 +143,8 @@ export interface ProviderValuesInterface {
     setNextToken2: React.Dispatch<React.SetStateAction<string>>
     allPosts: PostsDataInterface
     setAllPosts: React.Dispatch<React.SetStateAction<PostsDataInterface>>
-    finalList: finalListInterface[]
-    setFinalList: React.Dispatch<React.SetStateAction<finalListInterface[]>>
+    finalList: FinalListInterface[]
+    setFinalList: React.Dispatch<React.SetStateAction<FinalListInterface[]>>
     dataLoading: boolean
     setDataLoading:React.Dispatch<React.SetStateAction<boolean>>
     autoDownload: boolean

@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { EntitiesUrlInterface, MediaInterface, TweetInterface, AuthorNameInterface, finalListInterface, ProviderValuesInterface } from '../../types/all'
+import { EntitiesUrlInterface, MediaInterface, TweetInterface, AuthorNameInterface, FinalListInterface, ProviderValuesInterface } from '../../types/all'
 import { RingLoader } from 'react-spinners'
 import { saveAs } from 'file-saver'
 import { FaSadTear, FaLink, FaGlobeAsia } from 'react-icons/fa'
@@ -22,7 +22,7 @@ const TwitterDisplay = () => {
             console.log(allPosts);
             
             allPosts.posts?.data.map((post: TweetInterface) => {
-                let newList: finalListInterface = {
+                let newList: FinalListInterface = {
                     id: post.id,
                     author_id: post.author_id,
                     created_at: post.created_at,
@@ -58,7 +58,7 @@ const TwitterDisplay = () => {
                     })
                 })
 
-                post.entities?.urls?.map((url: any) => {
+                post.entities?.urls?.map((url: EntitiesUrlInterface) => {
                     temp2.push(url?.expanded_url)
                 })
 
@@ -103,7 +103,7 @@ const TwitterDisplay = () => {
         
     }, [finalList])
 
-    const handleVideoCopy = (link: any) => {
+    const handleVideoCopy = (link: string) => {
         if (link.includes('video')){
             let data = link.split('video')[0]
             navigator.clipboard.writeText(data)
@@ -177,7 +177,7 @@ const TwitterDisplay = () => {
                                                             <span onClick={() => handleCopy(url.url.match(/t.co\/(.*)/)![1])} className='cursor-pointer text-sm font-medium truncate hover:bg-[#ffffff3b] ml-1 px-1'>ID: {url.url.match(/t.co\/(.*)/)![1]}</span>
                                                         </div>
                                                         <div className='flex items-center justify-end gap-2'>
-                                                            <button onClick={() => handleVideoCopy(url.expanded_url)} className='text-xl'>
+                                                            <button onClick={() => handleVideoCopy(url.expanded_url!)} className='text-xl'>
                                                                 <FaLink />
                                                             </button>
                                                             <Link href='https://redketchup.io/twitter-downloader' target='_blank' className='text-xl'>

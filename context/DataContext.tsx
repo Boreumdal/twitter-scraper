@@ -1,13 +1,13 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { finalListInterface, LocalStoredInterface, PostsDataInterface, ProviderValuesInterface } from '../types/all'
+import { FinalListInterface, LocalStoredInterface, PostsDataInterface, ProviderValuesInterface } from '../types/all'
 
 const DataPostContext = createContext<ProviderValuesInterface | null>(null)
 
 export const DataContext = ({ children }: { children: React.ReactNode }) => {
     const [allPosts, setAllPosts] = useState<PostsDataInterface>({})
-    const [finalList, setFinalList] = useState<finalListInterface[]>([])
+    const [finalList, setFinalList] = useState<FinalListInterface[]>([])
     const [dataLoading, setDataLoading] = useState<boolean>(false)
     const [autoDownload, setAutoDownload] = useState<boolean>(false)
     const [localStored, setLocalStored] = useState<LocalStoredInterface>({
