@@ -30,13 +30,20 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
     const [mobileNav, setMobileNav] = useState<boolean>(true)
     const [downloadedPhotoLinks, setDownloadedPhotoLinks] = useState<string[]>([])
 
-    // const [systemState, updateSystemState] = useReducer((prev: any, next: any) => {
-    //     return {...prev, ...next}
-    // }, {
-        
-    // })
+    const [systemState, updateSystemState] = useReducer<any>((prev: any, next: any) => {
+        return {...prev, ...next}
+    }, {
+        lol: '',
+        totalPictures: 0,
+        totalVideos: 0,
+        twitterId: '',
+        twitterUsername: '',
+        autoDownload: false,
+        nextToken2: '',
+        isRestore: false
+    })
 
-    const providerValues: ProviderValuesInterface | null = { totalPictures, setTotalPictures, totalVideos, downloadedPhotoLinks, setDownloadedPhotoLinks, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, isRestore, setIsRestore, mobileNav, setMobileNav }
+    const providerValues: ProviderValuesInterface | null = { systemState, updateSystemState, totalPictures, setTotalPictures, totalVideos, downloadedPhotoLinks, setDownloadedPhotoLinks, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, isRestore, setIsRestore, mobileNav, setMobileNav }
 
     useEffect(() => {
         const stored = localStorage.getItem('mlv')

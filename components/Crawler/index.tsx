@@ -41,28 +41,16 @@ const TwitterIdCrawler = () => {
     })
 
     const { 
-        totalPictures, 
-        setTotalPictures, 
-        totalVideos, 
-        setTotalVideos, 
-        twitterId, 
-        setTwitterId, 
-        twitterUsername, 
-        setTwitterUsername, 
-        nextToken2, 
-        setNextToken2, 
+        systemState,
+        updateSystemState,
         allPosts, 
         setAllPosts, 
         finalList, 
         setFinalList, 
-        setDataLoading, 
-        autoDownload, 
-        setAutoDownload, 
+        setDataLoading,
         setAdvanceToggle, 
         localStored, 
         setLocalStored,
-        isRestore, 
-        setIsRestore,
         mobileNav,
     } = useData() as ProviderValuesInterface
 
@@ -71,11 +59,9 @@ const TwitterIdCrawler = () => {
     }
 
     const handleReset = () => {
-        setTwitterId('')
         updateState({ listOfId: 'NA', bearer: '', nextToken: '' })
         setAllPosts({})
         setFinalList([])
-        setTwitterUsername('')
         setCurrentAccount({
             url: "",
             name: "",
@@ -87,8 +73,14 @@ const TwitterIdCrawler = () => {
             id: "",
             description: ""
           })
-        setTotalPictures(0)
-        setTotalVideos(0)
+
+        updateSystemState({
+            totalPictures: 0,
+            totalVideos: 0,
+            twitterId: '',
+            twitterUsername: 'official_izone'
+        })
+
         setLocalStored({
             currentUsername: '',
             currentId: '',
@@ -105,10 +97,10 @@ const TwitterIdCrawler = () => {
         updateState({ loading2: true })
 
         try {
-            const response = await axios.post(`${origin}/api/twitter/user`, JSON.stringify({ username: twitterUsername, bearer: state.bearer }))
+            const response = await axios.post(`${origin}/api/twitter/user`, JSON.stringify({ username: systemState.twitterUsername, bearer: state.bearer }))
 
             if (response){
-                setTwitterId(response.data.user_id.data.id);
+                updateSystemState({ twitterId: response.data.user_id.data.id })
                 setCurrentAccount(response.data.user_id.data);
                 
                 updateState({ loading2: false })
@@ -124,7 +116,7 @@ const TwitterIdCrawler = () => {
         setDataLoading(true)
 
         try {
-            const response = await axios.post(`${origin}/api/twitter/ids`, JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
+            const response = await axios.post(`${origin}/api/twitter/ids`, JSON.stringify({ id: systemState.twitterId, nextToken: systemState.nextToken2 ? systemState.nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
             
             if (response){
                 let postIds = response.data.posts.data.map((post: TweetInterface) => {
@@ -144,9 +136,9 @@ const TwitterIdCrawler = () => {
                     listOfId: postIds.join(',')
                 }
 
-                if (isRestore){
-                    setNextToken2('')
-                    setIsRestore(false)
+                if (systemState.isRestore){
+                    updateSystemState({ nextToken2: '' })
+                    updateSystemState({ isRestore: false })
                     updateState({ ...tokenAndId })
                 } else {
                     updateState({ ...tokenAndId })
@@ -187,12 +179,10 @@ const TwitterIdCrawler = () => {
 
     useEffect(() => {
         if (allPosts.posts){
-            setTotalPictures(prev => {
-                return prev + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!
-            })
-
-            setTotalVideos(prev => {
-                return prev + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video').length!
+            updateSystemState({totalPictures:  systemState.totalPictures + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!})
+            updateSystemState({
+                totalPictures:  systemState.totalPictures + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!,
+                totalVideos:  systemState.totalVideos + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video').length!
             })
         }
         
@@ -203,25 +193,28 @@ const TwitterIdCrawler = () => {
         if (state.switcher){
             setLocalStored(prev => {
                 return {
-                    ...prev, totalVideos, totalPictures
+                    ...prev,
+                    totalVideos: systemState.totalVideos,
+                    totalPictures: systemState.totalPictures
                 }
             })
         } else {
             updateState({ switcher:true })
         }
 
-    }, [totalVideos, totalPictures])
+    }, [systemState.totalVideos, systemState.totalPictures])
 
     return (
         <>
-            {twitterId && <div className='absolute block sm:hidden h-fit bottom-3 left-3'>
-                <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
+            {systemState.twitterId && <div className='absolute block sm:hidden h-fit bottom-3 left-3'>
+                <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !systemState.twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
             </div>}
 
             <div className={(mobileNav ? 'flex' : 'hidden') + ' relative flex-col w-full h-full z-10'}>
                 <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto mx-2 mb-2 my-0 sm:m-0 text-base'>
-                    <IndentityForm setTwitterUsername={setTwitterUsername} handleUsernameIdFetch={handleUsernameIdFetch} twitterUsername={twitterUsername} state={state} updateState={updateState} />
+                    <IndentityForm updateSystemState={updateSystemState} handleUsernameIdFetch={handleUsernameIdFetch} username={systemState.twitterUsername} state={state} updateState={updateState} />
                     <LineDivider />
+                    <button onClick={() => console.log(systemState)}>asdasd</button>
                     <ProfileInformation currentAccount={currentAccount} />
                     <LineDivider />
                     <div className='grid grid-cols-2 gap-2 justify-between'>
@@ -231,7 +224,7 @@ const TwitterIdCrawler = () => {
                                 <div className='grid grid-cols-2 items-center h-[32px] gap-2 sm:gap-1'>
                                     <p className='text-xs opacity-50'>Auto Download</p>
                                     <div>
-                                        <input type="checkbox" checked={autoDownload} onChange={e => setAutoDownload(e.target.checked)} />
+                                        <input type="checkbox" checked={systemState.autoDownload} onChange={e => updateSystemState({ autoDownload: e.target.checked })} />
                                     </div>
                                 </div>
                                 <div className='grid grid-cols-2 items-center gap-2 h-[32px] sm:gap-1'>
@@ -247,7 +240,7 @@ const TwitterIdCrawler = () => {
                             <div className='flex flex-col gap-2'>
                                 <div className='flex gap-2 justify-between'>
                                     <div className='flex gap-2'>
-                                        <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
+                                        <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !systemState.twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
                                         {localStored && <ButtonSquare type='button' clickSync={() => setAdvanceToggle(prev => !prev)} custom='bg-[#4D96FF]' disable={!localStored.currentUsername} text={<FaServer />} />}
                                     </div>
                                     
@@ -255,13 +248,13 @@ const TwitterIdCrawler = () => {
                                 </div>
                                 <div className='flex items-center h-[32px] bg-[#ffffff15] rounded'>
                                     <p className='h-full aspect-square grid place-items-center rounded'><FaKey /></p>
-                                    <input type="text" className='block w-full h-full bg-transparent text-xs sm:text-sm outline-none text-white rounded disabled:opacity-75' value={nextToken2 ? nextToken2 : state.nextToken} onChange={e => setNextToken2(e.target.value)} placeholder='Continuation token' />
+                                    <input type="text" className='block w-full h-full bg-transparent text-xs sm:text-sm outline-none text-white rounded disabled:opacity-75' value={systemState.nextToken2 ? systemState.nextToken2 : state.nextToken} onChange={e => updateSystemState({ nextToken2: e.target.value })} placeholder='Continuation token' />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <LineDivider />
-                    <DataStatusContainer allPosts={allPosts} finalList={finalList} handleCopy={handleCopy} totalPictures={totalPictures} totalVideos={totalVideos} />
+                    <DataStatusContainer allPosts={allPosts} finalList={finalList} handleCopy={handleCopy} totalPictures={systemState.totalPictures} totalVideos={systemState.totalVideos} />
                 </div>
             </div>
         </>

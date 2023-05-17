@@ -7,14 +7,14 @@ import { PulseLoader } from 'react-spinners'
 
 const IndentityForm = ({
     handleUsernameIdFetch,
-    twitterUsername,
-    setTwitterUsername,
+    username,
+    updateSystemState,
     state,
     updateState
 }: {
     handleUsernameIdFetch: (e: React.FormEvent<HTMLFormElement>) => Promise<void>
-    twitterUsername: string
-    setTwitterUsername: React.Dispatch<React.SetStateAction<string>>
+    username: string
+    updateSystemState: any
     state: CrawlerStateInterface
     updateState: React.Dispatch<any>
 }) => {
@@ -23,7 +23,7 @@ const IndentityForm = ({
             <div className='flex flex-col gap-1'>
                 <div className='flex flex-col justify-center gap-1'>
                     <label htmlFor='username' className='block font-medium'>Username</label>
-                    <input type="text" id='username' className='block w-full h-[32px] bg-[#ffffff15] text-xs sm:text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={twitterUsername} onChange={e => setTwitterUsername(e.target.value)} placeholder='Twitter ID' disabled={state.nextToken ? true : false} required />
+                    <input type="text" id='username' className='block w-full h-[32px] bg-[#ffffff15] text-xs sm:text-sm outline-none text-white px-2 rounded disabled:opacity-75' value={username} onChange={e => updateSystemState({twitterUsername: e.target.value})} placeholder='Twitter ID' disabled={state.nextToken ? true : false} required />
                 </div>
                 <div className='flex flex-col justify-center gap-1'>
                     <label htmlFor='bearerToken' className='block font-medium'>Bearer Token</label>
@@ -32,7 +32,7 @@ const IndentityForm = ({
             </div>
 
             <div className='flex justify-end items-center'>
-                <Button type='submit' custom='bg-[#61B15A]' disable={!twitterUsername || !state.bearer} text={state.loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'} />
+                <Button type='submit' custom='bg-[#61B15A]' disable={!username || !state.bearer} text={state.loading2 ? <PulseLoader size={5} color="#fff" /> : 'Get User'} />
             </div>
         </form>
     )

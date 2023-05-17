@@ -130,6 +130,8 @@ export interface PostsDataInterface {
 }
 
 export interface ProviderValuesInterface {
+    systemState: any
+    updateSystemState: any
     mobileNav: boolean
     setMobileNav: React.Dispatch<React.SetStateAction<boolean>>
     isRestore: boolean
