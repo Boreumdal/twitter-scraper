@@ -24,7 +24,7 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
     const [nextToken2, setNextToken2] = useState<string>('')
     const [twitterId, setTwitterId] = useState<string>('')
     
-    const [totalPictures, setTotalPictures] = useState<number>(0)
+    const [totalPictures, setTotalPictures] = useState<number>(0) 
     const [totalVideos, setTotalVideos] = useState<number>(0)
     const [isRestore, setIsRestore] = useState<boolean>(false)
     const [mobileNav, setMobileNav] = useState<boolean>(true)
@@ -40,7 +40,16 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
         twitterUsername: '',
         autoDownload: false,
         nextToken2: '',
-        isRestore: false
+        isRestore: false,
+        localStored: {
+            currentUsername: '',
+            currentId: '',
+            nextToken: '',
+            finalListPosts: [],
+            totalVideos: 0,
+            totalPictures: 0
+        },
+        dataLoading: false
     })
 
     const providerValues: ProviderValuesInterface | null = { systemState, updateSystemState, totalPictures, setTotalPictures, totalVideos, downloadedPhotoLinks, setDownloadedPhotoLinks, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, isRestore, setIsRestore, mobileNav, setMobileNav }

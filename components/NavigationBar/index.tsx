@@ -8,11 +8,11 @@ import { HiMenuAlt2 } from 'react-icons/hi'
 import { RxCross2 } from 'react-icons/rx'
 
 const NavigationBar = () => {
-    const { mobileNav, setMobileNav } = useData() as ProviderValuesInterface
+    const { systemState, updateSystemState } = useData() as ProviderValuesInterface
     return (
         <nav className='grid grid-cols-3 items-center h-full gap-2 px-4'>
             <div className='text-2xl sm:text-3xl font-bold h-auto truncate flex items-center'>
-                <button onClick={() => setMobileNav(prev => !prev)} className='text-white block sm:hidden'>{!mobileNav ? <HiMenuAlt2 /> : <RxCross2 />}</button>
+                <button onClick={() => updateSystemState({ mobileNav: !systemState.mobileNav})} className='text-white block sm:hidden'>{!systemState.mobileNav ? <HiMenuAlt2 /> : <RxCross2 />}</button>
                 <span className='hidden sm:block'>Twitter Renderer</span>
             </div>
             <div className='flex justify-center text-3xl '>

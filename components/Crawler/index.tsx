@@ -46,12 +46,8 @@ const TwitterIdCrawler = () => {
         allPosts, 
         setAllPosts, 
         finalList, 
-        setFinalList, 
-        setDataLoading,
-        setAdvanceToggle, 
-        localStored, 
-        setLocalStored,
-        mobileNav,
+        setFinalList,
+        setAdvanceToggle,
     } = useData() as ProviderValuesInterface
 
     const handleCopy = (str: any) => {
@@ -81,13 +77,15 @@ const TwitterIdCrawler = () => {
             twitterUsername: 'official_izone'
         })
 
-        setLocalStored({
-            currentUsername: '',
-            currentId: '',
-            nextToken: '',
-            finalListPosts: [],
-            totalVideos: 0,
-            totalPictures: 0
+        updateState({
+            localStored: {
+                currentUsername: '',
+                currentId: '',
+                nextToken: '',
+                finalListPosts: [],
+                totalVideos: 0,
+                totalPictures: 0
+            }
         })
     }
 
@@ -108,12 +106,11 @@ const TwitterIdCrawler = () => {
         } catch (error){
             console.log(error);
         }
-
     }
 
     const handleTwitterPostIdCrawler = async () => {
         updateState({ loading: true })
-        setDataLoading(true)
+        updateSystemState({ dataLoading: true })
 
         try {
             const response = await axios.post(`${origin}/api/twitter/ids`, JSON.stringify({ id: systemState.twitterId, nextToken: systemState.nextToken2 ? systemState.nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
@@ -148,7 +145,7 @@ const TwitterIdCrawler = () => {
             console.log(error);
             setAllPosts(prev => prev)
             updateState({ loading: false })
-            setDataLoading(false)
+            updateSystemState({ dataLoading: false })
         }
     }
 
@@ -158,9 +155,9 @@ const TwitterIdCrawler = () => {
                 const response = await axios.post(`${origin}/api/twitter/posts`, { ids: state.listOfId, bearer: state.bearer })
 
                 if (response){
-                    setLocalStored(prev => {
-                        return {
-                            ...prev,
+                    updateSystemState({
+                        localStored: {
+                            ...systemState.localStored,
                             nextToken: state.nextToken,
                             currentUsername: currentAccount.username,
                             currentId: currentAccount.id
@@ -191,9 +188,9 @@ const TwitterIdCrawler = () => {
 
     useEffect(() => {
         if (state.switcher){
-            setLocalStored(prev => {
-                return {
-                    ...prev,
+            updateSystemState({
+                localStored: {
+                    ...systemState.localStored,
                     totalVideos: systemState.totalVideos,
                     totalPictures: systemState.totalPictures
                 }
@@ -210,7 +207,7 @@ const TwitterIdCrawler = () => {
                 <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !systemState.twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
             </div>}
 
-            <div className={(mobileNav ? 'flex' : 'hidden') + ' relative flex-col w-full h-full z-10'}>
+            <div className={(systemState.mobileNav ? 'flex' : 'hidden') + ' relative flex-col w-full h-full z-10'}>
                 <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto mx-2 mb-2 my-0 sm:m-0 text-base'>
                     <IndentityForm updateSystemState={updateSystemState} handleUsernameIdFetch={handleUsernameIdFetch} username={systemState.twitterUsername} state={state} updateState={updateState} />
                     <LineDivider />
@@ -241,7 +238,7 @@ const TwitterIdCrawler = () => {
                                 <div className='flex gap-2 justify-between'>
                                     <div className='flex gap-2'>
                                         <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !systemState.twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
-                                        {localStored && <ButtonSquare type='button' clickSync={() => setAdvanceToggle(prev => !prev)} custom='bg-[#4D96FF]' disable={!localStored.currentUsername} text={<FaServer />} />}
+                                        {systemState.localStored && <ButtonSquare type='button' clickSync={() => setAdvanceToggle(prev => !prev)} custom='bg-[#4D96FF]' disable={!systemState.localStored.currentUsername} text={<FaServer />} />}
                                     </div>
                                     
                                     <ButtonSquare type='button' clickSync={handleReset} custom='bg-[#DF2E38]' disable={state.loading || !state.nextToken} text={<FaRegTrashAlt />} />

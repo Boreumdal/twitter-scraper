@@ -11,7 +11,7 @@ import { useData } from '@context/DataContext'
 
 const TwitterDisplay = () => {
     const [switcher, setSwitcher] = useState(false)
-    const { allPosts, finalList, setFinalList, dataLoading, autoDownload, setDataLoading, localStored, setDownloadedPhotoLinks, setLocalStored } = useData() as ProviderValuesInterface
+    const { systemState, updateSystemState, allPosts, finalList, setFinalList, autoDownload, localStored, setDownloadedPhotoLinks, setLocalStored } = useData() as ProviderValuesInterface
     
     const handleDownload = (link: string) => {
         saveAs(link + '?format=jpg&name=4096x4096', link.match(/media\/(.*)/)![1])
@@ -74,7 +74,7 @@ const TwitterDisplay = () => {
                     return [...prev, newList]
                 })
                 
-                setDataLoading(false)
+                updateSystemState({ dataLoading: false })
                 
             })
 
@@ -118,9 +118,9 @@ const TwitterDisplay = () => {
 
     return (
         <div className='flex flex-col gap-2 h-full'>
-            {!allPosts.posts && !dataLoading && <p className='flex items-center gap-2 font-medium py-1'><FaSadTear /><span>No fetched data found</span></p>}
+            {!allPosts.posts && !systemState.dataLoading && <p className='flex items-center gap-2 font-medium py-1'><FaSadTear /><span>No fetched data found</span></p>}
 
-            {dataLoading 
+            {systemState.dataLoading 
                 ? (
                     <div className='h-full w-full grid place-items-center'>
                         <div className='flex flex-col items-center gap-2 justify-center'>
