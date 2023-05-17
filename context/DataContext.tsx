@@ -1,16 +1,16 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { finalListInterface, localStoredInterface, postsDataInterface, providerValuesInterface } from '../types/all'
+import { finalListInterface, LocalStoredInterface, PostsDataInterface, ProviderValuesInterface } from '../types/all'
 
-const DataPostContext = createContext<providerValuesInterface | null>(null)
+const DataPostContext = createContext<ProviderValuesInterface | null>(null)
 
 export const DataContext = ({ children }: { children: React.ReactNode }) => {
-    const [allPosts, setAllPosts] = useState<postsDataInterface>({})
+    const [allPosts, setAllPosts] = useState<PostsDataInterface>({})
     const [finalList, setFinalList] = useState<finalListInterface[]>([])
     const [dataLoading, setDataLoading] = useState<boolean>(false)
     const [autoDownload, setAutoDownload] = useState<boolean>(false)
-    const [localStored, setLocalStored] = useState<localStoredInterface>({
+    const [localStored, setLocalStored] = useState<LocalStoredInterface>({
         currentUsername: '',
         currentId: '',
         nextToken: '',
@@ -30,7 +30,7 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
     const [mobileNav, setMobileNav] = useState<boolean>(true)
     const [downloadedPhotoLinks, setDownloadedPhotoLinks] = useState<string[]>([])
 
-    const providerValues: providerValuesInterface | null = { totalPictures, setTotalPictures, totalVideos, downloadedPhotoLinks, setDownloadedPhotoLinks, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, isRestore, setIsRestore, mobileNav, setMobileNav }
+    const providerValues: ProviderValuesInterface | null = { totalPictures, setTotalPictures, totalVideos, downloadedPhotoLinks, setDownloadedPhotoLinks, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, isRestore, setIsRestore, mobileNav, setMobileNav }
 
     useEffect(() => {
         const stored = localStorage.getItem('mlv')
@@ -54,6 +54,6 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
 }
 
 export const useData = () => {
-    return useContext<providerValuesInterface | null>(DataPostContext)
+    return useContext<ProviderValuesInterface | null>(DataPostContext)
 }
 

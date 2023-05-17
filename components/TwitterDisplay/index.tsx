@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { authorNameInterface, finalListInterface, providerValuesInterface } from '../../types/all'
+import { EntitiesUrlInterface, MediaInterface, TweetInterface, AuthorNameInterface, finalListInterface, ProviderValuesInterface } from '../../types/all'
 import { RingLoader } from 'react-spinners'
 import { saveAs } from 'file-saver'
 import { FaSadTear, FaLink, FaGlobeAsia } from 'react-icons/fa'
@@ -11,7 +11,7 @@ import { useData } from '@context/DataContext'
 
 const TwitterDisplay = () => {
     const [switcher, setSwitcher] = useState(false)
-    const { allPosts, finalList, setFinalList, dataLoading, autoDownload, setDataLoading, localStored, setDownloadedPhotoLinks, setLocalStored } = useData() as providerValuesInterface
+    const { allPosts, finalList, setFinalList, dataLoading, autoDownload, setDataLoading, localStored, setDownloadedPhotoLinks, setLocalStored } = useData() as ProviderValuesInterface
     
     const handleDownload = (link: string) => {
         saveAs(link + '?format=jpg&name=4096x4096', link.match(/media\/(.*)/)![1])
@@ -19,7 +19,9 @@ const TwitterDisplay = () => {
 
     useEffect(() => {
         if (allPosts.posts){
-            allPosts.posts?.data.map((post: any) => {
+            console.log(allPosts);
+            
+            allPosts.posts?.data.map((post: TweetInterface) => {
                 let newList: finalListInterface = {
                     id: post.id,
                     author_id: post.author_id,
@@ -28,28 +30,28 @@ const TwitterDisplay = () => {
                     text: post.text,
                     links: [],
                     images: [],
-                    author_name: allPosts.posts?.includes.users?.filter((user: authorNameInterface) => user.id === post.author_id)[0] as authorNameInterface
+                    author_name: allPosts.posts?.includes.users?.filter((user: AuthorNameInterface) => user.id === post.author_id)[0] as AuthorNameInterface
                 }
 
                 let temp: string[] = []
                 let temp2: string[] = []
 
-                post?.attachments?.media_keys?.forEach((key: any) => {
-                    allPosts.posts?.includes.media?.forEach((attach: any) => {
+                post?.attachments?.media_keys?.forEach((key: string) => {
+                    allPosts.posts?.includes.media?.forEach((attach: MediaInterface) => {
                         if (attach.type === 'photo' && attach.media_key === key){
-                            temp.push(`collection/media/${attach.url.match(/media\/(.*)/)[1]}`)
+                            temp.push(`collection/media/${attach.url.match(/media\/(.*)/)![1]}`)
                         }
                         if (attach.type === 'video' && attach.media_key === key){
-                            post?.entities.urls.map((url: any) => {
+                            post.entities?.urls?.map((url: EntitiesUrlInterface) => {
                                 if (url.media_key === key){
-                                    temp.push(`collection/media/${url.url.match(/t.co\/(.*)/)[1]}.mp4`)
+                                    temp.push(`collection/media/${url.url.match(/t.co\/(.*)/)![1]}.mp4`)
                                 }
                             })
                         }
                         if (attach.type === 'animated_gif' && attach.media_key === key){
-                            post?.entities.urls.map((url: any) => {
+                            post.entities?.urls?.map((url: EntitiesUrlInterface) => {
                                 if (url.media_key === key){
-                                    temp.push(`collection/media/${url.url.match(/t.co\/(.*)/)[1]}.gif`)
+                                    temp.push(`collection/media/${url.url.match(/t.co\/(.*)/)![1]}.gif`)
                                 }
                             })
                         }
@@ -78,7 +80,7 @@ const TwitterDisplay = () => {
                 
             })
 
-            allPosts.posts?.includes.media?.forEach((attach: any) => {
+            allPosts.posts?.includes.media?.forEach((attach: MediaInterface) => {
                 if (attach.type === 'photo' && autoDownload){
                     handleDownload(attach.url)
                     setDownloadedPhotoLinks(prev => [...prev, attach.url])
@@ -137,7 +139,7 @@ const TwitterDisplay = () => {
                     <div className='grid grid-cols-2 gap-2'>
                         {
                             post?.attachments?.media_keys?.map((key: any) => {
-                                return allPosts.posts?.includes.media?.map((attach: any) => {
+                                return allPosts.posts?.includes.media?.map((attach: MediaInterface) => {
                                     if (attach.type === 'photo' && attach.media_key === key){
                                         return (
                                             <div key={attach.media_key} onClick={() => handleDownload(attach.url)} className='cursor-pointer hover:opacity-90 w-fit h-fit'>
@@ -146,12 +148,12 @@ const TwitterDisplay = () => {
                                         )
                                     }
                                     if (attach.type === 'video' && attach.media_key === key){
-                                        return post?.entities.urls.map((url: any) => {
+                                        return post?.entities.urls.map((url: EntitiesUrlInterface) => {
                                             if (url.media_key === key){
                                                 return (
                                                     <div key={key} className='grid grid-cols-2 h-[38px] items-center bg-[#ffffff15] border-l-4 border-transparent border-l-[#DF2E38] pr-2'>
                                                         <div className=''>
-                                                            <span onClick={() => handleCopy(url.url.match(/t.co\/(.*)/)[1])} className='cursor-pointer text-sm font-medium truncate hover:bg-[#ffffff3b] ml-1 px-1'>ID: {url.url.match(/t.co\/(.*)/)[1]}</span>
+                                                            <span onClick={() => handleCopy(url.url.match(/t.co\/(.*)/)![1])} className='cursor-pointer text-sm font-medium truncate hover:bg-[#ffffff3b] ml-1 px-1'>ID: {url.url.match(/t.co\/(.*)/)![1]}</span>
                                                         </div>
                                                         <div className='flex items-center justify-end gap-2'>
                                                             <button onClick={() => handleVideoCopy(url.expanded_url)} className='text-xl'>
@@ -167,12 +169,12 @@ const TwitterDisplay = () => {
                                         })
                                     }
                                     if (attach.type === 'animated_gif' && attach.media_key === key){
-                                        return post?.entities.urls.map((url: any) => {
+                                        return post?.entities.urls.map((url: MediaInterface) => {
                                             if (url.media_key === key){
                                                 return (
                                                     <div key={key} className='grid grid-cols-2 h-[38px] items-center bg-[#ffffff15] border-l-4 border-transparent border-l-[#2e78df] pr-2'>
                                                         <div className=''>
-                                                            <span onClick={() => handleCopy(url.url.match(/t.co\/(.*)/)[1])} className='cursor-pointer text-sm font-medium truncate hover:bg-[#ffffff3b] ml-1 px-1'>ID: {url.url.match(/t.co\/(.*)/)[1]}</span>
+                                                            <span onClick={() => handleCopy(url.url.match(/t.co\/(.*)/)![1])} className='cursor-pointer text-sm font-medium truncate hover:bg-[#ffffff3b] ml-1 px-1'>ID: {url.url.match(/t.co\/(.*)/)![1]}</span>
                                                         </div>
                                                         <div className='flex items-center justify-end gap-2'>
                                                             <button onClick={() => handleVideoCopy(url.expanded_url)} className='text-xl'>

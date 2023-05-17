@@ -1,5 +1,14 @@
+export interface CrawlerStateInterface {
+    loading: boolean
+    loading2: boolean
+    nextToken: string
+    listOfId: string
+    bearer: string
+    maximum: number
+    switcher: boolean
+}
 
-export interface currentAccountInterface {
+export interface CurrentAccountInterface {
     url: string
     name: string
     username: string
@@ -11,7 +20,7 @@ export interface currentAccountInterface {
     description: string
 }
 
-export interface authorNameInterface {
+export interface AuthorNameInterface {
     url: string
     profile_image_url: string
     username: string
@@ -30,11 +39,11 @@ export interface finalListInterface {
     text: string
     links: string[]
     images: string[]
-    author_name: authorNameInterface
+    author_name: AuthorNameInterface
     referenced_tweets?: any
   }
 
-export interface localStoredInterface {
+export interface LocalStoredInterface {
     currentUsername: string
     currentId: string
     nextToken: string
@@ -43,42 +52,57 @@ export interface localStoredInterface {
     totalPictures: number
 }
 
-export interface postsDataInterface {
-    posts?: {
-        data: {
-            entities?: {
-                mentions?: [
-                    {
-                        start: number
-                        end: number
-                        username: string
-                        id: string
-                    }
-                ],
-                urls?: {
-                    start: number
-                    end: number
-                    url: string
-                    expanded_url: string
-                    display_url: string
-                }[]
-                hashtags?: {
-                    start: number
-                    end: number
-                    tag: string
-                }[]
-            },
-            created_at: string
-            text: string
-            conversation_id: string
-            attachments?: {
-              media_keys?: string[]
-            }
+export interface MediaInterface {
+    media_key: string
+    type: string
+    url: string
+    expanded_url?: string
+}
+
+export interface EntitiesUrlInterface {
+    start: number
+    end: number
+    url: string
+    media_key?: string
+    expanded_url: string
+    display_url: string
+}
+
+export interface TweetInterface {
+    entities?: {
+        mentions?: {
+            start: number
+            end: number
+            username: string
             id: string
-            author_id: string
-            lang: string
-            edit_history_tweet_ids: string[]
         }[]
+        urls?: EntitiesUrlInterface[]
+        hashtags?: {
+            start: number
+            end: number
+            tag: string
+        }[]
+    }
+    created_at: string
+    text: string
+    conversation_id: string
+    attachments?: {
+      media_keys?: string[]
+    }
+    id: string
+    author_id: string
+    lang: string
+    edit_history_tweet_ids: string[]
+    referenced_tweets?: {
+        type: string
+        id: string
+    }[]
+    in_reply_to_user_id?: string
+}
+
+export interface PostsDataInterface {
+    posts?: {
+        data: TweetInterface[]
         includes: {
             media?: {
                 media_key: string
@@ -95,11 +119,12 @@ export interface postsDataInterface {
                 verified: boolean
                 url: string
             }[]
+            tweeets?: TweetInterface[]
         }
     }
 }
 
-export interface providerValuesInterface {
+export interface ProviderValuesInterface {
     mobileNav: boolean
     setMobileNav: React.Dispatch<React.SetStateAction<boolean>>
     isRestore: boolean
@@ -116,8 +141,8 @@ export interface providerValuesInterface {
     setTwitterUsername: React.Dispatch<React.SetStateAction<string>>
     nextToken2: string
     setNextToken2: React.Dispatch<React.SetStateAction<string>>
-    allPosts: postsDataInterface
-    setAllPosts: React.Dispatch<React.SetStateAction<postsDataInterface>>
+    allPosts: PostsDataInterface
+    setAllPosts: React.Dispatch<React.SetStateAction<PostsDataInterface>>
     finalList: finalListInterface[]
     setFinalList: React.Dispatch<React.SetStateAction<finalListInterface[]>>
     dataLoading: boolean
@@ -126,6 +151,6 @@ export interface providerValuesInterface {
     setAutoDownload: React.Dispatch<React.SetStateAction<boolean>>
     advanceToggle: boolean
     setAdvanceToggle: React.Dispatch<React.SetStateAction<boolean>>
-    localStored: localStoredInterface
-    setLocalStored: React.Dispatch<React.SetStateAction<localStoredInterface>>
+    localStored: LocalStoredInterface
+    setLocalStored: React.Dispatch<React.SetStateAction<LocalStoredInterface>>
 }

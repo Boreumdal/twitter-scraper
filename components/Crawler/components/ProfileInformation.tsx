@@ -1,8 +1,8 @@
 import Image from 'next/image'
-import { currentAccountInterface } from '../../../types/all'
+import { CurrentAccountInterface } from '../../../types/all'
 import React from 'react'
 
-const ProfileInformation = ({ currentAccount }: { currentAccount: currentAccountInterface }) => {
+const ProfileInformation = ({ currentAccount }: { currentAccount: CurrentAccountInterface }) => {
     return (
         <div>
             <div className='grid grid-cols-2 items-center justify-center pb-1'>

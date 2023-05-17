@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
-import { providerValuesInterface, currentAccountInterface } from '../../types/all'
+import { ProviderValuesInterface, CurrentAccountInterface, CrawlerStateInterface } from '../../types/all'
 import { useData } from '@context/DataContext'
 import { FaRegTrashAlt, FaKey, FaServer } from 'react-icons/fa'
 import { PulseLoader } from 'react-spinners'
@@ -12,21 +12,11 @@ import ButtonSquare from './components/ButtonSquare'
 import DataStatusContainer from './components/DataStatusContainer'
 import ProfileInformation from './components/ProfileInformation'
 
-interface CrawlerStateInterface {
-    loading: boolean
-    loading2: boolean
-    nextToken: string
-    listOfId: string
-    bearer: string
-    maximum: number
-    switcher: boolean
-}
-
 const origin = process.env.NEXT_PUBLIC_DEVELOPMENT_ENV === 'production' ? 'https://twitter-scraper-drab.vercel.app' : 'http://localhost:3000'
 
 const TwitterIdCrawler = () => {
 
-    const [currentAccount, setCurrentAccount] = useState<currentAccountInterface>({
+    const [currentAccount, setCurrentAccount] = useState<CurrentAccountInterface>({
         url: '',
         name: '',
         username: '',
@@ -73,7 +63,7 @@ const TwitterIdCrawler = () => {
         isRestore, 
         setIsRestore,
         mobileNav,
-    } = useData() as providerValuesInterface
+    } = useData() as ProviderValuesInterface
 
     const handleCopy = (str: any) => {
         navigator.clipboard.writeText(JSON.stringify(str))

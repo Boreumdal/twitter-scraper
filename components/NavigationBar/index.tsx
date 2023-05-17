@@ -1,14 +1,14 @@
 'use client'
 
 import { useData } from '@context/DataContext'
-import { providerValuesInterface } from '../../types/all'
+import { ProviderValuesInterface } from '../../types/all'
 import Link from 'next/link'
 import { FaTwitter, FaGithub, FaExclamationCircle } from 'react-icons/fa'
 import { HiMenuAlt2 } from 'react-icons/hi'
 import { RxCross2 } from 'react-icons/rx'
 
 const NavigationBar = () => {
-    const { mobileNav, setMobileNav } = useData() as providerValuesInterface
+    const { mobileNav, setMobileNav } = useData() as ProviderValuesInterface
     return (
         <nav className='grid grid-cols-3 items-center h-full gap-2 px-4'>
             <div className='text-2xl sm:text-3xl font-bold h-auto truncate flex items-center'>

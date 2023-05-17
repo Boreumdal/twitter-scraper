@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { providerValuesInterface } from '../../types/all'
+import { ProviderValuesInterface } from '../../types/all'
 import { useData } from '@context/DataContext'
 import DataStatusContainer from './components/DataStatusContainer'
 import DataAccountInfoContainer from './components/DataAccountInfoContainer'
@@ -11,7 +11,7 @@ import { RxCross2 } from 'react-icons/rx'
 
 const AdvanceSettings = () => {
     const [page, setPage] = useState(1)
-    const { setIsRestore, setTotalPictures, setTotalVideos, setTwitterUsername, setNextToken2, advanceToggle, downloadedPhotoLinks, setAdvanceToggle, localStored, setFinalList } = useData() as providerValuesInterface
+    const { setIsRestore, setTotalPictures, setTotalVideos, setTwitterUsername, setNextToken2, advanceToggle, downloadedPhotoLinks, setAdvanceToggle, localStored, setFinalList } = useData() as ProviderValuesInterface
 
     const handleRestore = () => {
         setTwitterUsername(localStored.currentUsername)

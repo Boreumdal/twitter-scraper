@@ -1,7 +1,7 @@
 import React from 'react'
 import DataStatus from '../../components/DataStatus'
 import { FaRegCopy } from 'react-icons/fa'
-import { postsDataInterface, finalListInterface } from '../../../types/all'
+import { PostsDataInterface, finalListInterface } from '../../../types/all'
 
 const DataStatusContainer = ({ 
     allPosts, 
@@ -10,7 +10,7 @@ const DataStatusContainer = ({
     totalPictures, 
     totalVideos 
 }: { 
-    allPosts: postsDataInterface
+    allPosts: PostsDataInterface
     finalList: finalListInterface[]
     handleCopy: (str: any) => void
     totalPictures: number

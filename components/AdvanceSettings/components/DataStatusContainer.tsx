@@ -1,7 +1,7 @@
-import { localStoredInterface } from '../../../types/all'
+import { LocalStoredInterface } from '../../../types/all'
 import React from 'react'
 
-const DataStatusContainer = ({ localStored }: { localStored: localStoredInterface}) => {
+const DataStatusContainer = ({ localStored }: { localStored: LocalStoredInterface}) => {
     return (
         <>
             <h1 className=''>Status</h1>
