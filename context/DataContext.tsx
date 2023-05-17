@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useReducer, useState } from 'react'
 import { FinalListInterface, LocalStoredInterface, PostsDataInterface, ProviderValuesInterface } from '../types/all'
 
 const DataPostContext = createContext<ProviderValuesInterface | null>(null)
@@ -29,6 +29,12 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
     const [isRestore, setIsRestore] = useState<boolean>(false)
     const [mobileNav, setMobileNav] = useState<boolean>(true)
     const [downloadedPhotoLinks, setDownloadedPhotoLinks] = useState<string[]>([])
+
+    // const [systemState, updateSystemState] = useReducer((prev: any, next: any) => {
+    //     return {...prev, ...next}
+    // }, {
+        
+    // })
 
     const providerValues: ProviderValuesInterface | null = { totalPictures, setTotalPictures, totalVideos, downloadedPhotoLinks, setDownloadedPhotoLinks, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, isRestore, setIsRestore, mobileNav, setMobileNav }
 

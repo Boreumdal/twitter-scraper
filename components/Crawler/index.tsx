@@ -35,7 +35,7 @@ const TwitterIdCrawler = () => {
         loading2: false,
         nextToken: '',
         listOfId: 'NA',
-        bearer: 'AAAAAAAAAAAAAAAAAAAAAPhDjAEAAAAAD5PuEFs0Dr7VCneL6fX%2BxYMbdN8%3DocnGW2z8aelSXKlt9D3ln3UGLyViRmgPRm17l1mdaXjDA2HvK8', // will be deleted and regenerated after final build
+        bearer: 'AAAAAAAAAAAAAAAAAAAAAPhDjAEAAAAAD5PuEFs0Dr7VCneL6fX%2BxYMbdN8%3DocnGW2z8aelSXKlt9D3ln3UGLyViRmgPRm17l1mdaXjDA2HvK8', // will be deleted after final build
         maximum: 10,
         switcher: false
     })
