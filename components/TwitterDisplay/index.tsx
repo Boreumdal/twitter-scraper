@@ -19,8 +19,6 @@ const TwitterDisplay = () => {
 
     useEffect(() => {
         if (allPosts.posts){
-            console.log(allPosts);
-            
             allPosts.posts?.data.map((post: TweetInterface) => {
                 let newList: FinalListInterface = {
                     id: post.id,
@@ -114,8 +112,8 @@ const TwitterDisplay = () => {
         }
     }
 
-    const handleCopy = (str: any) => {
-        navigator.clipboard.writeText(typeof(str) === 'string' ? str : JSON.stringify(str))
+    const handleCopy = (str: string) => {
+        navigator.clipboard.writeText(str)
     }
 
     return (
@@ -131,14 +129,14 @@ const TwitterDisplay = () => {
                         </div>
                     </div>
                 )
-                : allPosts.posts?.data.map((post: any, idx: number) => (
+                : allPosts.posts?.data.map((post: TweetInterface, idx: number) => (
                 <div key={idx} className='bg-[#171717] p-4 flex flex-col sm:grid sm:grid-cols-2 gap-2'>
                     <div>
                         <p className='whitespace-pre-line'>{post.text}</p>
                     </div>
                     <div className='grid grid-cols-2 gap-2'>
                         {
-                            post?.attachments?.media_keys?.map((key: any) => {
+                            post?.attachments?.media_keys?.map((key: string) => {
                                 return allPosts.posts?.includes.media?.map((attach: MediaInterface) => {
                                     if (attach.type === 'photo' && attach.media_key === key){
                                         return (
@@ -148,7 +146,7 @@ const TwitterDisplay = () => {
                                         )
                                     }
                                     if (attach.type === 'video' && attach.media_key === key){
-                                        return post?.entities.urls.map((url: EntitiesUrlInterface) => {
+                                        return post.entities?.urls?.map((url: EntitiesUrlInterface) => {
                                             if (url.media_key === key){
                                                 return (
                                                     <div key={key} className='grid grid-cols-2 h-[38px] items-center bg-[#ffffff15] border-l-4 border-transparent border-l-[#DF2E38] pr-2'>
@@ -169,7 +167,7 @@ const TwitterDisplay = () => {
                                         })
                                     }
                                     if (attach.type === 'animated_gif' && attach.media_key === key){
-                                        return post?.entities.urls.map((url: MediaInterface) => {
+                                        return post.entities?.urls?.map((url: EntitiesUrlInterface) => {
                                             if (url.media_key === key){
                                                 return (
                                                     <div key={key} className='grid grid-cols-2 h-[38px] items-center bg-[#ffffff15] border-l-4 border-transparent border-l-[#2e78df] pr-2'>

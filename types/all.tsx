@@ -41,7 +41,12 @@ export interface FinalListInterface {
     images: string[]
     author_name: AuthorNameInterface
     referenced_tweets?: any
-  }
+}
+
+export interface ReferenceTweetInterface {
+    type: string
+    id: string
+}
 
 export interface LocalStoredInterface {
     currentUsername: string

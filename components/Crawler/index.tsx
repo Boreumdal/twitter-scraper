@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
-import { ProviderValuesInterface, CurrentAccountInterface, CrawlerStateInterface } from '../../types/all'
+import { ProviderValuesInterface, CurrentAccountInterface, CrawlerStateInterface, TweetInterface, ReferenceTweetInterface } from '../../types/all'
 import { useData } from '@context/DataContext'
 import { FaRegTrashAlt, FaKey, FaServer } from 'react-icons/fa'
 import { PulseLoader } from 'react-spinners'
@@ -126,13 +126,13 @@ const TwitterIdCrawler = () => {
             const response = await axios.post(`${origin}/api/twitter/ids`, JSON.stringify({ id: twitterId, nextToken: nextToken2 ? nextToken2 : state.nextToken, bearer: state.bearer, maximum: state.maximum < 5 || state.maximum > 100 ? 5 : state.maximum }))
             
             if (response){
-                let postIds = response.data.posts.data.map((post: any) => {
+                let postIds = response.data.posts.data.map((post: TweetInterface) => {
                     if (!post.referenced_tweets){
                         return post.id
                     }
 
-                    if (post.referenced_tweets.some((item: any) => item.type === 'retweeted')){
-                        return post.referenced_tweets.find((item: any )=> item.type === 'retweeted').id
+                    if (post.referenced_tweets.some((item: ReferenceTweetInterface) => item.type === 'retweeted')){
+                        return post.referenced_tweets.find((item: ReferenceTweetInterface )=> item.type === 'retweeted')!.id
                     }
 
                     return post.id
