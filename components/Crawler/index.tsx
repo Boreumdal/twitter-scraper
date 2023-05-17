@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
-import { ProviderValuesInterface, CurrentAccountInterface, CrawlerStateInterface, TweetInterface, ReferenceTweetInterface } from '../../types/all'
+import { ProviderValuesInterface, CurrentAccountInterface, CrawlerStateInterface, TweetInterface, ReferenceTweetInterface, MediaInterface } from '../../types/all'
 import { useData } from '@context/DataContext'
 import { FaRegTrashAlt, FaKey, FaServer } from 'react-icons/fa'
 import { PulseLoader } from 'react-spinners'
@@ -187,11 +187,11 @@ const TwitterIdCrawler = () => {
     useEffect(() => {
         if (allPosts.posts){
             setTotalPictures(prev => {
-                return prev + allPosts.posts?.includes.media?.filter((attach: any) => attach.type === 'photo').length!
+                return prev + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!
             })
 
             setTotalVideos(prev => {
-                return prev + allPosts.posts?.includes.media?.filter((attach: any) => attach.type === 'video').length!
+                return prev + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video').length!
             })
         }
         
