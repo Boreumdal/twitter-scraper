@@ -11,7 +11,7 @@ import { useData } from '@context/DataContext'
 
 const TwitterDisplay = () => {
     const [switcher, setSwitcher] = useState(false)
-    const { systemState, updateSystemState, allPosts, finalList, setFinalList, autoDownload, localStored, setDownloadedPhotoLinks, setLocalStored } = useData() as ProviderValuesInterface
+    const { systemState, updateSystemState, allPosts, autoDownload, setDownloadedPhotoLinks, setLocalStored } = useData() as ProviderValuesInterface
     
     const handleDownload = (link: string) => {
         saveAs(link + '?format=jpg&name=4096x4096', link.match(/media\/(.*)/)![1])
@@ -19,6 +19,7 @@ const TwitterDisplay = () => {
 
     useEffect(() => {
         if (allPosts.posts){
+            let aa: any[] = []
             allPosts.posts?.data.map((post: TweetInterface) => {
                 let newList: FinalListInterface = {
                     id: post.id,
@@ -70,14 +71,16 @@ const TwitterDisplay = () => {
                     newList['referenced_tweets'] = post.in_reply_to_user_id
                 }
 
-                setFinalList(prev => {
-                    return [...prev, newList]
-                })
+                console.log(systemState.finalList);
                 
-                updateSystemState({ dataLoading: false })
-                
+                aa.push(newList)
             })
-
+            
+            updateSystemState({
+                finalList: aa,
+                dataLoading: false,
+                asd: systemState.asd + 1
+            })
             allPosts.posts?.includes.media?.forEach((attach: MediaInterface) => {
                 if (attach.type === 'photo' && autoDownload){
                     handleDownload(attach.url)
@@ -89,17 +92,17 @@ const TwitterDisplay = () => {
 
     useEffect(() => {
         if (switcher){
-            setLocalStored(prev => {
-                return {
-                    ...prev,
-                    finalListPosts: finalList
+            updateSystemState({
+                localStored: {
+                    ...systemState.localStored,
+                    finalListPosts: systemState.finalList
                 }
             })
         } else {
             setSwitcher(true)
         }
         
-    }, [finalList])
+    }, [systemState.finalList])
 
     const handleVideoCopy = (link: string) => {
         if (link.includes('video')){

@@ -30,14 +30,14 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
     const [mobileNav, setMobileNav] = useState<boolean>(true)
     const [downloadedPhotoLinks, setDownloadedPhotoLinks] = useState<string[]>([])
 
-    const [systemState, updateSystemState] = useReducer<any>((prev: any, next: any) => {
+    const [systemState, updateSystemState] = useReducer((prev: any, next: any): any => {
         return {...prev, ...next}
     }, {
         lol: '',
         totalPictures: 0,
         totalVideos: 0,
         twitterId: '',
-        twitterUsername: '',
+        twitterUsername: 'minju_official_',
         autoDownload: false,
         nextToken2: '',
         isRestore: false,
@@ -49,7 +49,11 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
             totalVideos: 0,
             totalPictures: 0
         },
-        dataLoading: false
+        dataLoading: false,
+        mobileNav: true,
+        advanceToggle: false,
+        finalList: [],
+        asd: 0
     })
 
     const providerValues: ProviderValuesInterface | null = { systemState, updateSystemState, totalPictures, setTotalPictures, totalVideos, downloadedPhotoLinks, setDownloadedPhotoLinks, setTotalVideos, twitterId, setTwitterId, twitterUsername, setTwitterUsername, nextToken2, setNextToken2, allPosts, setAllPosts, finalList, setFinalList, dataLoading, setDataLoading , autoDownload, setAutoDownload, advanceToggle, setAdvanceToggle, localStored, setLocalStored, isRestore, setIsRestore, mobileNav, setMobileNav }
@@ -60,13 +64,13 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
         if (stored){
             setLocalStored(JSON.parse(stored))
         } else {
-            localStorage.setItem('mlv', JSON.stringify(localStored))
+            localStorage.setItem('mlv', JSON.stringify(systemState.localStored))
         }
     }, [])
 
     useEffect(() => {
-        localStorage.setItem('mlv', JSON.stringify(localStored))
-    }, [localStored])
+        localStorage.setItem('mlv', JSON.stringify(systemState.localStored))
+    }, [systemState.localStored])
 
     return (
         <DataPostContext.Provider value={providerValues}>

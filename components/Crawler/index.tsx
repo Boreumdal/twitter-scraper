@@ -45,9 +45,6 @@ const TwitterIdCrawler = () => {
         updateSystemState,
         allPosts, 
         setAllPosts, 
-        finalList, 
-        setFinalList,
-        setAdvanceToggle,
     } = useData() as ProviderValuesInterface
 
     const handleCopy = (str: any) => {
@@ -57,7 +54,6 @@ const TwitterIdCrawler = () => {
     const handleReset = () => {
         updateState({ listOfId: 'NA', bearer: '', nextToken: '' })
         setAllPosts({})
-        setFinalList([])
         setCurrentAccount({
             url: "",
             name: "",
@@ -74,10 +70,8 @@ const TwitterIdCrawler = () => {
             totalPictures: 0,
             totalVideos: 0,
             twitterId: '',
-            twitterUsername: 'official_izone'
-        })
-
-        updateState({
+            twitterUsername: 'official_izone',
+            finalList: [],
             localStored: {
                 currentUsername: '',
                 currentId: '',
@@ -89,7 +83,6 @@ const TwitterIdCrawler = () => {
         })
     }
 
-    // USER
     const handleUsernameIdFetch = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         updateState({ loading2: true })
@@ -134,8 +127,7 @@ const TwitterIdCrawler = () => {
                 }
 
                 if (systemState.isRestore){
-                    updateSystemState({ nextToken2: '' })
-                    updateSystemState({ isRestore: false })
+                    updateSystemState({ nextToken2: '', isRestore: false })
                     updateState({ ...tokenAndId })
                 } else {
                     updateState({ ...tokenAndId })
@@ -176,7 +168,6 @@ const TwitterIdCrawler = () => {
 
     useEffect(() => {
         if (allPosts.posts){
-            updateSystemState({totalPictures:  systemState.totalPictures + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!})
             updateSystemState({
                 totalPictures:  systemState.totalPictures + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!,
                 totalVideos:  systemState.totalVideos + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video').length!
@@ -238,7 +229,7 @@ const TwitterIdCrawler = () => {
                                 <div className='flex gap-2 justify-between'>
                                     <div className='flex gap-2'>
                                         <Button type='button' click={handleTwitterPostIdCrawler} custom='bg-[#4D96FF]' disable={state.loading || !systemState.twitterId || state.nextToken === 'Last'} text={state.loading ? <PulseLoader size={5} color="#fff" /> : state.nextToken ? 'Next' : 'Fetch'} />
-                                        {systemState.localStored && <ButtonSquare type='button' clickSync={() => setAdvanceToggle(prev => !prev)} custom='bg-[#4D96FF]' disable={!systemState.localStored.currentUsername} text={<FaServer />} />}
+                                        {systemState.localStored && <ButtonSquare type='button' clickSync={() => updateSystemState({ advanceToggle: true })} custom='bg-[#4D96FF]' disable={!systemState.localStored.currentUsername} text={<FaServer />} />}
                                     </div>
                                     
                                     <ButtonSquare type='button' clickSync={handleReset} custom='bg-[#DF2E38]' disable={state.loading || !state.nextToken} text={<FaRegTrashAlt />} />
@@ -251,7 +242,7 @@ const TwitterIdCrawler = () => {
                         </div>
                     </div>
                     <LineDivider />
-                    <DataStatusContainer allPosts={allPosts} finalList={finalList} handleCopy={handleCopy} totalPictures={systemState.totalPictures} totalVideos={systemState.totalVideos} />
+                    <DataStatusContainer allPosts={allPosts} finalList={systemState.finalList} handleCopy={handleCopy} totalPictures={systemState.totalPictures} totalVideos={systemState.totalVideos} />
                 </div>
             </div>
         </>
