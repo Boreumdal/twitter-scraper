@@ -1,11 +1,11 @@
 'use client'
 
-import React, { createContext, useContext, useEffect, useReducer } from 'react'
+import { createContext, useContext, useEffect, useReducer, ReactNode } from 'react'
 import { ProviderValuesInterface, SystemStateInterface } from '../types/all'
 
 const DataPostContext = createContext<ProviderValuesInterface | null>(null)
 
-export const DataContext = ({ children }: { children: React.ReactNode }) => {
+export const DataContext = ({ children }: { children: ReactNode }) => {
     const [systemState, updateSystemState] = useReducer((prev: SystemStateInterface, next: any): SystemStateInterface => {
         return {...prev, ...next}
     }, {

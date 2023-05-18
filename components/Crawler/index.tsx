@@ -1,7 +1,7 @@
 'use client'
 
 import axios from 'axios'
-import React, { useEffect, useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { ProviderValuesInterface, CurrentAccountInterface, CrawlerStateInterface, TweetInterface, ReferenceTweetInterface, MediaInterface } from '../../types/all'
 import { useData } from '@context/DataContext'
 import { FaRegTrashAlt, FaKey, FaServer } from 'react-icons/fa'
@@ -16,7 +16,6 @@ import IndentityForm from './components/IndentityForm'
 const origin = process.env.NEXT_PUBLIC_DEVELOPMENT_ENV === 'production' ? process.env.NEXT_PUBLIC_MAIN_URL : 'http://localhost:3000'
 
 const TwitterIdCrawler = () => {
-
     const [currentAccount, setCurrentAccount] = useState<CurrentAccountInterface>({
         url: '',
         name: '',
@@ -28,6 +27,7 @@ const TwitterIdCrawler = () => {
         id: '',
         description: ''
     })
+
     const [state, updateState] = useReducer((prev: CrawlerStateInterface, next: any): CrawlerStateInterface => {
         return {...prev, ...next}
     }, {
@@ -40,10 +40,7 @@ const TwitterIdCrawler = () => {
         switcher: false
     })
 
-    const { 
-        systemState,
-        updateSystemState,
-    } = useData() as ProviderValuesInterface
+    const { systemState, updateSystemState } = useData() as ProviderValuesInterface
 
     const handleCopy = (str: any) => {
         navigator.clipboard.writeText(JSON.stringify(str))
@@ -188,7 +185,6 @@ const TwitterIdCrawler = () => {
                 <div className='bg-[#171717] p-4 flex flex-col justify-between h-full overflow-auto mx-2 mb-2 my-0 sm:m-0 text-base'>
                     <IndentityForm updateSystemState={updateSystemState} handleUsernameIdFetch={handleUsernameIdFetch} username={systemState.twitterUsername} state={state} updateState={updateState} />
                     <LineDivider />
-                    <button onClick={() => console.log(systemState)}>asdasd</button>
                     <ProfileInformation currentAccount={currentAccount} />
                     <LineDivider />
                     <div className='grid grid-cols-2 gap-2 justify-between'>

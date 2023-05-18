@@ -1,4 +1,3 @@
-import React from 'react'
 import DataStatus from '../../components/DataStatus'
 import { FaRegCopy } from 'react-icons/fa'
 import { PostsDataInterface, FinalListInterface } from '../../../types/all'

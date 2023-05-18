@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import { CurrentAccountInterface } from '../../../types/all'
-import React from 'react'
 
 const ProfileInformation = ({ currentAccount }: { currentAccount: CurrentAccountInterface }) => {
     return (
