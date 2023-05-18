@@ -6,8 +6,6 @@ import { ProviderValuesInterface, SystemStateInterface } from '../types/all'
 const DataPostContext = createContext<ProviderValuesInterface | null>(null)
 
 export const DataContext = ({ children }: { children: React.ReactNode }) => {
-    const [downloadedPhotoLinks, setDownloadedPhotoLinks] = useState<string[]>([])
-
     const [systemState, updateSystemState] = useReducer((prev: any, next: any): SystemStateInterface => {
         return {...prev, ...next}
     }, {
@@ -30,10 +28,11 @@ export const DataContext = ({ children }: { children: React.ReactNode }) => {
         mobileNav: true,
         advanceToggle: false,
         finalList: [],
+        downloadedPhotoLinks: [],
         allPosts: {}
     })
 
-    const providerValues: ProviderValuesInterface | null = { systemState, updateSystemState, downloadedPhotoLinks, setDownloadedPhotoLinks }
+    const providerValues: ProviderValuesInterface | null = { systemState, updateSystemState }
 
     useEffect(() => {
         const stored = localStorage.getItem('mlv')

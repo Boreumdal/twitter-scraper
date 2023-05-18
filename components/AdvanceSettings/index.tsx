@@ -10,7 +10,7 @@ import { RxCross2 } from 'react-icons/rx'
 
 const AdvanceSettings = () => {
     const [page, setPage] = useState(1)
-    const { systemState, updateSystemState, downloadedPhotoLinks } = useData() as ProviderValuesInterface
+    const { systemState, updateSystemState } = useData() as ProviderValuesInterface
 
     const handleRestore = () => {
         updateSystemState({
@@ -35,7 +35,7 @@ const AdvanceSettings = () => {
                         <button onClick={() => updateSystemState({ advanceToggle: false })} className='text-2xl hover:text-red-500'><RxCross2 /></button>
                     </div>
                 </div>
-                {page === 1 ? <RestorePage localStored={systemState.localStored} handleRestore={handleRestore} /> : <MoreOptionPage downloadedPhotoLinks={downloadedPhotoLinks} />}
+                {page === 1 ? <RestorePage localStored={systemState.localStored} handleRestore={handleRestore} /> : <MoreOptionPage downloadedPhotoLinks={systemState.downloadedPhotoLinks} />}
 
             </div>
         </div>

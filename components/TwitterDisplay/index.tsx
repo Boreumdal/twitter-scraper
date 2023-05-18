@@ -11,7 +11,7 @@ import { useData } from '@context/DataContext'
 
 const TwitterDisplay = () => {
     const [switcher, setSwitcher] = useState(false)
-    const { systemState, updateSystemState, setDownloadedPhotoLinks } = useData() as ProviderValuesInterface
+    const { systemState, updateSystemState } = useData() as ProviderValuesInterface
     
     const handleDownload = (link: string) => {
         saveAs(link + '?format=jpg&name=4096x4096', link.match(/media\/(.*)/)![1])
@@ -75,17 +75,20 @@ const TwitterDisplay = () => {
                 temporaryArr.push(newList)
             })
             
-            updateSystemState({
-                finalList: [...systemState.finalList, ...temporaryArr],
-                dataLoading: false,
-                asd: systemState.asd + 1
-            })
+            
+            let downloadedPhotoLinksArray: string[] = []
             
             systemState.allPosts.posts?.includes.media?.forEach((attach: MediaInterface) => {
                 if (attach.type === 'photo' && systemState.autoDownload){
                     handleDownload(attach.url)
-                    setDownloadedPhotoLinks(prev => [...prev, attach.url])
+                    downloadedPhotoLinksArray.push(attach.url)
                 }
+            })
+
+            updateSystemState({
+                finalList: [...systemState.finalList, ...temporaryArr],
+                dataLoading: false,
+                downloadedPhotoLinks: [...systemState.downloadedPhotoLinks, ...downloadedPhotoLinksArray]
             })
         }
     }, [systemState.allPosts])

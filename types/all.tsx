@@ -143,11 +143,10 @@ export interface SystemStateInterface {
     advanceToggle: boolean
     finalList: FinalListInterface[]
     allPosts: PostsDataInterface
+    downloadedPhotoLinks: string[]
 }
 
 export interface ProviderValuesInterface {
     systemState: any
     updateSystemState: any
-    downloadedPhotoLinks: string[]
-    setDownloadedPhotoLinks: React.Dispatch<React.SetStateAction<string[]>>
 }
