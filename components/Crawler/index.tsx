@@ -83,6 +83,8 @@ const TwitterIdCrawler = () => {
         updateState({ loading2: true })
 
         try {
+            console.log(origin);
+            
             const response = await axios.post(`${origin}/api/twitter/user`, JSON.stringify({ username: systemState.twitterUsername, bearer: state.bearer }))
 
             if (response){

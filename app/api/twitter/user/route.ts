@@ -13,8 +13,6 @@ const handler = async (request: Request) => {
               'Authorization': `Bearer ${bearer}`
             }
         }
-
-        
         
         const response = await axios.get(`https://api.twitter.com/2/users/by/username/${username}?user.fields=created_at,description,entities,id,location,name,url,username,verified,profile_image_url`, config)
 
