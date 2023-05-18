@@ -129,35 +129,25 @@ export interface PostsDataInterface {
     }
 }
 
+export interface SystemStateInterface {
+    totalPictures: number
+    totalVideos: number
+    twitterId: string
+    twitterUsername: string
+    autoDownload: boolean
+    nextToken2: string
+    isRestore: boolean
+    localStored: LocalStoredInterface
+    dataLoading: boolean
+    mobileNav: boolean
+    advanceToggle: boolean
+    finalList: FinalListInterface[]
+    allPosts: PostsDataInterface
+}
+
 export interface ProviderValuesInterface {
     systemState: any
     updateSystemState: any
-    mobileNav: boolean
-    setMobileNav: React.Dispatch<React.SetStateAction<boolean>>
-    isRestore: boolean
-    setIsRestore: React.Dispatch<React.SetStateAction<boolean>>
-    totalPictures: number
-    setTotalPictures: React.Dispatch<React.SetStateAction<number>>
-    totalVideos: number
-    setTotalVideos: React.Dispatch<React.SetStateAction<number>>
-    twitterId: string
-    setTwitterId: React.Dispatch<React.SetStateAction<string>>
     downloadedPhotoLinks: string[]
     setDownloadedPhotoLinks: React.Dispatch<React.SetStateAction<string[]>>
-    twitterUsername: string
-    setTwitterUsername: React.Dispatch<React.SetStateAction<string>>
-    nextToken2: string
-    setNextToken2: React.Dispatch<React.SetStateAction<string>>
-    allPosts: PostsDataInterface
-    setAllPosts: React.Dispatch<React.SetStateAction<PostsDataInterface>>
-    finalList: FinalListInterface[]
-    setFinalList: React.Dispatch<React.SetStateAction<FinalListInterface[]>>
-    dataLoading: boolean
-    setDataLoading:React.Dispatch<React.SetStateAction<boolean>>
-    autoDownload: boolean
-    setAutoDownload: React.Dispatch<React.SetStateAction<boolean>>
-    advanceToggle: boolean
-    setAdvanceToggle: React.Dispatch<React.SetStateAction<boolean>>
-    localStored: LocalStoredInterface
-    setLocalStored: React.Dispatch<React.SetStateAction<LocalStoredInterface>>
 }

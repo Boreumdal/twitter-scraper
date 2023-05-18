@@ -43,8 +43,6 @@ const TwitterIdCrawler = () => {
     const { 
         systemState,
         updateSystemState,
-        allPosts, 
-        setAllPosts, 
     } = useData() as ProviderValuesInterface
 
     const handleCopy = (str: any) => {
@@ -53,7 +51,6 @@ const TwitterIdCrawler = () => {
 
     const handleReset = () => {
         updateState({ listOfId: 'NA', bearer: '', nextToken: '' })
-        setAllPosts({})
         setCurrentAccount({
             url: "",
             name: "",
@@ -79,7 +76,8 @@ const TwitterIdCrawler = () => {
                 finalListPosts: [],
                 totalVideos: 0,
                 totalPictures: 0
-            }
+            },
+            allPosts: {}
         })
     }
 
@@ -135,9 +133,8 @@ const TwitterIdCrawler = () => {
             }
         } catch (error){
             console.log(error);
-            setAllPosts(prev => prev)
             updateState({ loading: false })
-            updateSystemState({ dataLoading: false })
+            updateSystemState({ dataLoading: false, allPosts: systemState.allPosts })
         }
     }
 
@@ -156,7 +153,7 @@ const TwitterIdCrawler = () => {
                         }
                     })
 
-                    setAllPosts(response.data)
+                    updateSystemState({ allPosts: response.data })
                     updateState({ loading: false })
                 }
             }
@@ -167,31 +164,20 @@ const TwitterIdCrawler = () => {
     }, [state.nextToken])
 
     useEffect(() => {
-        if (allPosts.posts){
+        if (systemState.allPosts.posts){
             updateSystemState({
-                totalPictures:  systemState.totalPictures + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!,
-                totalVideos:  systemState.totalVideos + allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video').length!
-            })
-        }
-        
-        
-    }, [allPosts])
-
-    useEffect(() => {
-        if (state.switcher){
-            updateSystemState({
+                totalPictures: systemState.totalPictures + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!,
+                totalVideos: systemState.totalVideos + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video').length!,
                 localStored: {
                     ...systemState.localStored,
-                    totalVideos: systemState.totalVideos,
-                    totalPictures: systemState.totalPictures
+                    totalVideos: systemState.totalVideos + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video').length!,
+                    totalPictures: systemState.totalPictures + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!
                 }
             })
-        } else {
-            updateState({ switcher:true })
         }
-
-    }, [systemState.totalVideos, systemState.totalPictures])
-
+        
+        
+    }, [systemState.allPosts])
     return (
         <>
             {systemState.twitterId && <div className='absolute block sm:hidden h-fit bottom-3 left-3'>
@@ -242,7 +228,7 @@ const TwitterIdCrawler = () => {
                         </div>
                     </div>
                     <LineDivider />
-                    <DataStatusContainer allPosts={allPosts} finalList={systemState.finalList} handleCopy={handleCopy} totalPictures={systemState.totalPictures} totalVideos={systemState.totalVideos} />
+                    <DataStatusContainer allPosts={systemState.allPosts} finalList={systemState.finalList} handleCopy={handleCopy} totalPictures={systemState.totalPictures} totalVideos={systemState.totalVideos} />
                 </div>
             </div>
         </>

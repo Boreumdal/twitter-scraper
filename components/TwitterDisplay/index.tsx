@@ -11,16 +11,17 @@ import { useData } from '@context/DataContext'
 
 const TwitterDisplay = () => {
     const [switcher, setSwitcher] = useState(false)
-    const { systemState, updateSystemState, allPosts, autoDownload, setDownloadedPhotoLinks, setLocalStored } = useData() as ProviderValuesInterface
+    const { systemState, updateSystemState, setDownloadedPhotoLinks } = useData() as ProviderValuesInterface
     
     const handleDownload = (link: string) => {
         saveAs(link + '?format=jpg&name=4096x4096', link.match(/media\/(.*)/)![1])
     }
 
     useEffect(() => {
-        if (allPosts.posts){
-            let aa: any[] = []
-            allPosts.posts?.data.map((post: TweetInterface) => {
+        if (systemState.allPosts.posts){
+            let temporaryArr: any[] = []
+
+            systemState.allPosts.posts?.data.map((post: TweetInterface) => {
                 let newList: FinalListInterface = {
                     id: post.id,
                     author_id: post.author_id,
@@ -29,14 +30,14 @@ const TwitterDisplay = () => {
                     text: post.text,
                     links: [],
                     images: [],
-                    author_name: allPosts.posts?.includes.users?.filter((user: AuthorNameInterface) => user.id === post.author_id)[0] as AuthorNameInterface
+                    author_name: systemState.allPosts.posts?.includes.users?.filter((user: AuthorNameInterface) => user.id === post.author_id)[0] as AuthorNameInterface
                 }
 
                 let temp: string[] = []
                 let temp2: string[] = []
 
                 post?.attachments?.media_keys?.forEach((key: string) => {
-                    allPosts.posts?.includes.media?.forEach((attach: MediaInterface) => {
+                    systemState.allPosts.posts?.includes.media?.forEach((attach: MediaInterface) => {
                         if (attach.type === 'photo' && attach.media_key === key){
                             temp.push(`collection/media/${attach.url.match(/media\/(.*)/)![1]}`)
                         }
@@ -71,24 +72,23 @@ const TwitterDisplay = () => {
                     newList['referenced_tweets'] = post.in_reply_to_user_id
                 }
 
-                console.log(systemState.finalList);
-                
-                aa.push(newList)
+                temporaryArr.push(newList)
             })
             
             updateSystemState({
-                finalList: aa,
+                finalList: [...systemState.finalList, ...temporaryArr],
                 dataLoading: false,
                 asd: systemState.asd + 1
             })
-            allPosts.posts?.includes.media?.forEach((attach: MediaInterface) => {
-                if (attach.type === 'photo' && autoDownload){
+            
+            systemState.allPosts.posts?.includes.media?.forEach((attach: MediaInterface) => {
+                if (attach.type === 'photo' && systemState.autoDownload){
                     handleDownload(attach.url)
                     setDownloadedPhotoLinks(prev => [...prev, attach.url])
                 }
             })
         }
-    }, [allPosts])
+    }, [systemState.allPosts])
 
     useEffect(() => {
         if (switcher){
@@ -121,7 +121,7 @@ const TwitterDisplay = () => {
 
     return (
         <div className='flex flex-col gap-2 h-full'>
-            {!allPosts.posts && !systemState.dataLoading && <p className='flex items-center gap-2 font-medium py-1'><FaSadTear /><span>No fetched data found</span></p>}
+            {!systemState.allPosts.posts && !systemState.dataLoading && <p className='flex items-center gap-2 font-medium py-1'><FaSadTear /><span>No fetched data found</span></p>}
 
             {systemState.dataLoading 
                 ? (
@@ -132,7 +132,7 @@ const TwitterDisplay = () => {
                         </div>
                     </div>
                 )
-                : allPosts.posts?.data.map((post: TweetInterface, idx: number) => (
+                : systemState.allPosts.posts?.data.map((post: TweetInterface, idx: number) => (
                 <div key={idx} className='bg-[#171717] p-4 flex flex-col sm:grid sm:grid-cols-2 gap-2'>
                     <div>
                         <p className='whitespace-pre-line'>{post.text}</p>
@@ -140,7 +140,7 @@ const TwitterDisplay = () => {
                     <div className='grid grid-cols-2 gap-2'>
                         {
                             post?.attachments?.media_keys?.map((key: string) => {
-                                return allPosts.posts?.includes.media?.map((attach: MediaInterface) => {
+                                return systemState.allPosts.posts?.includes.media?.map((attach: MediaInterface) => {
                                     if (attach.type === 'photo' && attach.media_key === key){
                                         return (
                                             <div key={attach.media_key} onClick={() => handleDownload(attach.url)} className='cursor-pointer hover:opacity-90 w-fit h-fit'>
