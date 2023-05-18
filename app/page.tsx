@@ -2,11 +2,9 @@
 import AdvanceSettings from '@components/AdvanceSettings'
 import TwitterDisplay from '@components/TwitterDisplay'
 import TwitterIdCrawler from '@components/Crawler'
-import React from 'react'
 import NavigationBar from '@components/NavigationBar'
 
 const Home = () => {
-    
     return (
         <div className=' bg-[#2B2B2B] text-white w-full grid grid-rows-[auto_92vh] h-screen overflow-hidden'>
             <NavigationBar />

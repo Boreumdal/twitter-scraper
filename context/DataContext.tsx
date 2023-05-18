@@ -1,12 +1,12 @@
 'use client'
 
-import React, { createContext, useContext, useEffect, useReducer, useState } from 'react'
+import React, { createContext, useContext, useEffect, useReducer } from 'react'
 import { ProviderValuesInterface, SystemStateInterface } from '../types/all'
 
 const DataPostContext = createContext<ProviderValuesInterface | null>(null)
 
 export const DataContext = ({ children }: { children: React.ReactNode }) => {
-    const [systemState, updateSystemState] = useReducer((prev: any, next: any): SystemStateInterface => {
+    const [systemState, updateSystemState] = useReducer((prev: SystemStateInterface, next: any): SystemStateInterface => {
         return {...prev, ...next}
     }, {
         totalPictures: 0,

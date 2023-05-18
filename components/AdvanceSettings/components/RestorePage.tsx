@@ -1,4 +1,3 @@
-import React from 'react'
 import DataAccountInfoContainer from './DataAccountInfoContainer'
 import DataStatusContainer from './DataStatusContainer'
 import Button from '@components/components/Button'

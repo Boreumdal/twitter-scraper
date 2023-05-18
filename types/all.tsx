@@ -1,3 +1,20 @@
+export interface IdsInterface {
+    id: string
+    nextToken: string | null
+    bearer: string
+    maximum: string
+}
+
+export interface UserInterface {
+    username: string
+    bearer: string
+}
+
+export interface PostsInterface {
+    ids: string[]
+    bearer: string
+}
+
 export interface CrawlerStateInterface {
     loading: boolean
     loading2: boolean

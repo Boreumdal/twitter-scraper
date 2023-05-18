@@ -1,3 +1,4 @@
+import { UserInterface } from '../../../../types/all'
 import axios from 'axios'
 import { NextResponse } from 'next/server'
 
@@ -5,7 +6,7 @@ const origin = process.env.DEVELOPMENT_ENV === 'production' ? process.env.NEXT_P
 
 const handler = async (request: Request) => {
     try {
-        const { username, bearer } = await request.json()
+        const { username, bearer }: UserInterface = await request.json()
 
         const config = {
             headers: { 
@@ -20,9 +21,9 @@ const handler = async (request: Request) => {
         if (response){
             return new NextResponse(JSON.stringify({ user_id: response.data }), {
                 headers: {
-                'Access-Control-Allow-Origin': origin,
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    'Access-Control-Allow-Origin': origin!,
+                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
               }
             })
         }

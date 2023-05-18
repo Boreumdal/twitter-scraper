@@ -1,5 +1,3 @@
-import React from 'react'
-
 const MoreOptionPage = ({ downloadedPhotoLinks }: { downloadedPhotoLinks: string[] }) => {
     return (
         <div className='px-6 py-2'>

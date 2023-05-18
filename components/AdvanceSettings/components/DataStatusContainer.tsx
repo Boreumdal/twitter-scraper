@@ -1,5 +1,4 @@
 import { LocalStoredInterface } from '../../../types/all'
-import React from 'react'
 import DataStatus from './DataStatus'
 
 const DataStatusContainer = ({ localStored }: { localStored: LocalStoredInterface}) => {

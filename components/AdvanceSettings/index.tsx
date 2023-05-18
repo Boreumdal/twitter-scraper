@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { ProviderValuesInterface } from '../../types/all'
 import { useData } from '@context/DataContext'
 import RestorePage from './components/RestorePage'
