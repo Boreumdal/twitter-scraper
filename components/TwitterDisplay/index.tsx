@@ -1,8 +1,8 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import { EntitiesUrlInterface, MediaInterface, TweetInterface, AuthorNameInterface, FinalListInterface, ProviderValuesInterface } from '../../types/all'
 import { RingLoader } from 'react-spinners'
 import { saveAs } from 'file-saver'

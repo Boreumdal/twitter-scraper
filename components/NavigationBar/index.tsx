@@ -1,8 +1,8 @@
 'use client'
 
+import Link from 'next/link'
 import { useData } from '@context/DataContext'
 import { ProviderValuesInterface } from '../../types/all'
-import Link from 'next/link'
 import { FaTwitter, FaGithub, FaExclamationCircle } from 'react-icons/fa'
 import { HiMenuAlt2 } from 'react-icons/hi'
 import { RxCross2 } from 'react-icons/rx'
