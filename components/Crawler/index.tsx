@@ -166,10 +166,10 @@ const TwitterIdCrawler = () => {
         if (systemState.allPosts.posts){
             updateSystemState({
                 totalPictures: systemState.totalPictures + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!,
-                totalVideos: systemState.totalVideos + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video').length!,
+                totalVideos: systemState.totalVideos + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video' || attach.type === 'animated_gif').length!,
                 localStored: {
                     ...systemState.localStored,
-                    totalVideos: systemState.totalVideos + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video').length!,
+                    totalVideos: systemState.totalVideos + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'video' || attach.type === 'animated_gif').length!,
                     totalPictures: systemState.totalPictures + systemState.allPosts.posts?.includes.media?.filter((attach: MediaInterface) => attach.type === 'photo').length!
                 }
             })
